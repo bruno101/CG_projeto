@@ -7,7 +7,6 @@
 #include "ObjetoComFaces.h"
 using namespace std;
 
-
 //FUNÇÕES COM MATRIZES E VETORES
 
 
@@ -418,17 +417,20 @@ void display()
 		triangle(triangularPyramid, 0, 2, 1, color);
 	}*/
 
-
-	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
+	Objeto& a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
 	a1Tronco.paint();
-	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
+	Objeto& a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
 	a1Folhas1.paint();
-	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Objeto& a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
 	a1Folhas2.paint();
-	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Objeto& a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
 	a1Folhas3.paint();
-	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Objeto& a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
 	a1Folhas4.paint();
+
+	//Vector<Objeto> objetos = { a1Tronco, a1Folhas1, a1Folhas2, a1Folhas3, a1Folhas4 };
+
+
 
 	//vector<vector<float>> a1Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0));
 	//vector<vector<float>> a1Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0));

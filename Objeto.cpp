@@ -19,3 +19,31 @@ vector<float> Objeto::produtoVetorial(vector<float> x, vector<float> y) {
 	return z;
 
 }
+
+vector<float> Objeto::somaVetores(vector<float> x, vector<float> y) {
+	vector<float> v;
+	v[0] = x[0] + y[0];
+	v[1] = x[1] + y[1];
+	v[2] = x[2] + y[2];
+	return v;
+}
+
+vector<float> Objeto::diferencaVetores(vector<float> x, vector<float> y) {
+	vector<float> v;
+	v[0] = x[0] - y[0];
+	v[1] = x[1] - y[1];
+	v[2] = x[2] - y[2];
+	return v;
+}
+
+vector<float> Objeto::multiplicaVetorPorEscalar(vector<float> x, float k) {
+	vector<float> v;
+	v[0] = x[0] * k;
+	v[1] = x[1] * k;
+	v[2] = x[2] * k;
+	return v;
+}
+
+float Objeto::normaVetor(vector<float> x) {
+	return (sqrt(x[0]*x[0]+x[1]*x[1]*x[2]*x[2]));
+}
