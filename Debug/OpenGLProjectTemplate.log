@@ -1,0 +1,50 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLProjectTemplate.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  ObjetoComFaces.cpp
+c:\users\bruno\onedrive\documentos\cg\cg - projeto\objetocomfaces.cpp(22): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4800: 'int': forcing value to bool 'true' or 'false' (performance warning)
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=bool,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(519): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=bool,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\users\bruno\onedrive\documentos\cg\cg - projeto\objetocomfaces.cpp(17): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<int,int,0,0>(std::tuple<int,int> &&)' being compiled
+  c:\users\bruno\onedrive\documentos\cg\cg - projeto\objetocomfaces.cpp(17): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<int,int,0,0>(std::tuple<int,int> &&)' being compiled
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(341): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=float,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(340): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=float,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
+          with
+          [
+              _Tag=std::_Unpack_tuple_t
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(518): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
+          with
+          [
+              _Tag=std::_Unpack_tuple_t
+          ]
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Source.cpp
+  OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG - Projeto\Debug\CG - projeto.exe
+  OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG - Projeto\Debug\CG - projeto.pdb (Full PDB)
