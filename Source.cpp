@@ -320,6 +320,35 @@ void specialKeys(int key, int x, int y)
 	glutPostRedisplay();
 }
 
+void corPixel(vector<Objeto*> objetos, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+{
+
+	bool intersecta;
+	float t = 100000;
+
+	bool x;
+	float y;
+
+	for (int i = 0; i < size(objetos); i++) {
+		tie(x, y) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
+		if (x == true) {
+			intersecta == true;
+			if (x < t) {
+				t = x;
+			}
+		}
+	}
+
+	//terminar
+
+}
+
+void lancarRaios(vector<Objeto*> objetos, int m, int n, float left, float right, float bottom, float top, float p0x, float p0y, float p0z) 
+{
+	vector<vector<GLfloat>> janela[3];
+	//retornar janela?
+}
+
 void display()
 {
 	glClearColor(0.529, 0.808, 0.922, 1);
@@ -417,18 +446,19 @@ void display()
 		triangle(triangularPyramid, 0, 2, 1, color);
 	}*/
 
-	Objeto& a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
-	a1Tronco.paint();
-	Objeto& a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
-	a1Folhas1.paint();
-	Objeto& a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	a1Folhas2.paint();
-	Objeto& a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	a1Folhas3.paint();
-	Objeto& a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	a1Folhas4.paint();
+	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
+	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
+	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
 
-	//Vector<Objeto> objetos = { a1Tronco, a1Folhas1, a1Folhas2, a1Folhas3, a1Folhas4 };
+	vector<Objeto*> objetos = { &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 };
+
+	lancarRaios(objetos, 100, 100, -1, 1, 0, 2, 0, 0, 0);
+
+	for (int i = 0; i < size(objetos); i++) {
+		(*objetos[i]).paint();
+	}
 
 
 
