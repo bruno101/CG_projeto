@@ -17,6 +17,9 @@ public:
 
 protected:
 
+	vector<float> centro;
+	float raio;
+	virtual bool podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz) = 0;
 	float produtoEscalar(vector<float> x, vector<float> y);
 	vector<float> produtoVetorial(vector<float> x, vector<float> y);
 	vector<float> somaVetores(vector<float> x, vector<float> y);

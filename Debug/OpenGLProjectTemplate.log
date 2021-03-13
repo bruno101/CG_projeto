@@ -1,120 +1,171 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLProjectTemplate.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Source.cpp
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(87): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(96): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(105): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(332): warning C4018: '<': signed/unsigned mismatch
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(335): warning C4553: '==': operator has no effect; did you intend '='?
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(336): warning C4804: '<': unsafe use of type 'bool' in operation
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(354): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(385): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(386): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(400): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(407): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(413): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(413): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(420): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(451): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(452): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(453): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(459): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(89): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(98): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(107): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(328): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(359): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(360): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(374): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(381): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(387): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(387): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(394): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(455): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(456): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(457): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(466): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(467): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(468): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(477): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(478): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(479): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(480): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(488): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(489): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(490): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(491): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(500): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(501): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(502): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(511): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(512): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(513): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(522): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(522): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(554): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(557): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(559): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(562): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(562): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(564): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(565): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(566): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(569): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(575): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(579): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(583): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(586): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(589): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(596): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(597): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(598): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(599): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(603): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(606): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(607): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(607): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(651): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(652): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(653): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(499): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(499): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(531): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(534): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(536): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(539): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(539): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(541): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(542): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(543): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(546): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(552): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(556): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(560): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(563): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(566): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(573): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(574): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(575): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(576): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(580): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(583): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(584): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(584): warning C4244: 'argument': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(628): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(629): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(630): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(631): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(636): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(637): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(638): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(639): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(646): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(647): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(648): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(649): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(654): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(659): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(660): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(661): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(655): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(656): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(657): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(662): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(669): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(663): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(664): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(665): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(670): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(671): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(672): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(677): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(673): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(678): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(679): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(680): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(685): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(681): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(686): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(687): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(688): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(693): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(689): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(694): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(695): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(696): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(701): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(697): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(702): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(703): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(704): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(709): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(705): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(710): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(711): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(712): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(717): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(713): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(718): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(719): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(720): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(725): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(721): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(726): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(727): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(728): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(733): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(729): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(734): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(735): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(736): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(741): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(737): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(742): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(743): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(744): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(749): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(750): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(751): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(752): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(757): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(758): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(759): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(760): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(765): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(766): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(767): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(768): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-  Objeto.cpp
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(745): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(765): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(780): warning C4305: '=': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(781): warning C4305: '=': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(782): warning C4305: '=': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(802): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(826): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(827): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(827): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(828): warning C4305: 'argument': truncation from 'double' to 'float'
+  ObjetoComFaces.cpp
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(15): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(22): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(111): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(127): warning C4018: '<': signed/unsigned mismatch
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4800: 'float': forcing value to bool 'true' or 'false' (performance warning)
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=bool,
+              _Ty=float,
+              _Other=float
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(519): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=bool,
+              _Ty=float,
+              _Other=float
+          ]
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(79): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(79): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
+c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(341): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=float,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(340): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
+          with
+          [
+              _This=float,
+              _Ty=int,
+              _Other=int
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
+          with
+          [
+              _Tag=std::_Unpack_tuple_t
+          ]
+  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(518): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
+          with
+          [
+              _Tag=std::_Unpack_tuple_t
+          ]
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(105): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<bool,int,0,0>(std::tuple<bool,int> &&)' being compiled
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(105): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<bool,int,0,0>(std::tuple<bool,int> &&)' being compiled
   Generating Code...
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.exe
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.pdb (Full PDB)

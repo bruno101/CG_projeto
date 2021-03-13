@@ -15,6 +15,7 @@ private:
 	vector<vector<int>> faces;
 	GLfloat color[3];
 	vector<float> getNormalFace(int numFace);
+	virtual bool podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz);
 	tuple<bool, float> hasIntersectionFace(float p0x, float p0y, float p0z, float dx, float dy, float dz, int numFace);
 
 public:

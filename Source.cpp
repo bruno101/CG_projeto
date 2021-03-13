@@ -4,7 +4,9 @@
 #include <stdlib.h>
 #include <vector>
 #include <math.h>
+#include <tuple>
 #include "ObjetoComFaces.h"
+
 using namespace std;
 
 //FUNÇÕES COM MATRIZES E VETORES
@@ -320,37 +322,9 @@ void specialKeys(int key, int x, int y)
 	glutPostRedisplay();
 }
 
-void corPixel(vector<Objeto*> objetos, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+void displayOld()
 {
 
-	bool intersecta;
-	float t = 100000;
-
-	bool x;
-	float y;
-
-	for (int i = 0; i < size(objetos); i++) {
-		tie(x, y) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
-		if (x == true) {
-			intersecta == true;
-			if (x < t) {
-				t = x;
-			}
-		}
-	}
-
-	//terminar
-
-}
-
-void lancarRaios(vector<Objeto*> objetos, int m, int n, float left, float right, float bottom, float top, float p0x, float p0y, float p0z) 
-{
-	vector<vector<GLfloat>> janela[3];
-	//retornar janela?
-}
-
-void display()
-{
 	glClearColor(0.529, 0.808, 0.922, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -446,7 +420,7 @@ void display()
 		triangle(triangularPyramid, 0, 2, 1, color);
 	}*/
 
-	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
+	/*ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
 	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
 	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
 	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
@@ -454,11 +428,14 @@ void display()
 
 	vector<Objeto*> objetos = { &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 };
 
-	lancarRaios(objetos, 100, 100, -1, 1, 0, 2, 0, 0, 0);
+	vector<vector<GLfloat>> janela[3] = { { {0.0,0.0,0.0},{ 0.0,0.0,0.0 } }, { {0.0,0.0,0.0},{ 0.0,0.0,0.0 } },
+};*/
+	/*lancarRaios(janela, objetos, 2, 2, -1, 1, 0, 2, 0, 0, 0, -1);
 
 	for (int i = 0; i < size(objetos); i++) {
 		(*objetos[i]).paint();
-	}
+	}*/
+
 
 
 
@@ -769,34 +746,112 @@ void display()
 	glEnd();
 
 	glutSwapBuffers();
+
+}
+
+tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+{
+
+	GLfloat R;
+	GLfloat G;
+	GLfloat B;
+
+	bool intersecta = false;
+	float t = 100000;
+
+	bool x;
+	float y;
+
+	for (int i = 0; i < size(objetos); i++) {
+		tie(x, y) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
+		if (x == true) {
+			intersecta = true;
+			if (y < t) {
+				t = y;
+			}
+		}
+	}
+
+	if (intersecta == true) {
+		R = 0.0;
+		G = 0.0;
+		B = 1.0;
+	} else {		
+		R = 0.529;
+		G = 0.808;
+		B = 0.922;
+	}
+
+	//terminar
+
+	return make_tuple(R, G, B);
+
+}
+
+int Width = 100;
+int Height = 100;
+GLfloat janela[100][100][3];
+
+void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float z)
+{
+
+	float R, G, B;
+
+	for (int i = 0; i < Height; i++) {
+		for (int j = 0; j < Width; j++) {
+			auto tup = corPixel(objetos, p0x, p0y, p0z, left+(right-left)*(0.5+j)/Width, bottom+(top-bottom)*(0.5+i)/Height, z);
+			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
+			janela[i][j][0] = R;
+			janela[i][j][1] = G;
+			janela[i][j][2] = B;
+		}
+	}
+
+	/*for (int i = 0; i<640; i++) {
+		for (int j = 0; j<480; j++) {
+			janela[i][j][0] = 0.0;
+			janela[i][j][1] = 0.0;
+			janela[i][j][2] = 1.0;
+		}
+	}*/
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDrawPixels(Width, Height, GL_RGB, GL_FLOAT, janela);
+	glutSwapBuffers();
+
+}
+
+void display()
+{
+	vector<vector<float>> topoArvore = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-0.25, 1.0, -0.25), scaleMatrix(0.6, 0.8, 0.6)));
+	GLfloat pineGreen[3] = { 0.004, 0.475, 0.318 };
+	vector<vector<float>> troncoArvore = multiplyByMatrix(8, basicCube, scaleMatrix(0.1, 1.0, 0.1));
+	GLfloat treeBrown[3] = { 119.0 / 256.0, 69.0 / 256.0, 19.0 / 256.0 };
+	
+	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
+	//ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	//ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	//ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	//ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+
+	vector<Objeto*> objetos = { &a1Tronco, /*&a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4*/ };
+
+	lancarRaios(objetos, -1, 1, 0, 2, 0, 0, 0, -1);
+
 }
 
 int main(int argc, char **argv)
 {
 
-
-	/*
-	vector<vector<float>> M1 = { { 0.0,1.0,2.0,0.0 },{ 0.0,1.0,2.0,0.0 },{ 0.0,1.0,2.0,0.0 },{ 0.0,0.0,0.0,1.0 }, };
-	vector<vector<float>> M2 = { { 0.0,1.0,2.0,0.0 },{ 0.0,1.0,2.0,0.0 },{ 0.0,1.0,2.0,0.0 },{ 0.0,0.0,0.0,1.0 }, };
-	vector<vector<float>> M3 = multiplyMatrix(M1, M2);
-	std::cout << M1[0][0] << M3[0][0] << M3[0][1] << M3[1][1];
-	vector<float> V1 = { 1.0,1.0,1.0 };
-	vector<float> V2 = multiplyVectorByMatrix(V1, M1);
-	cout << "\n" << V2[0] << V2[1] << V2[2];
-	triangularPyramid = multiplyByMatrix(4, basicTriangularPyramid, M1);
-	cout << "\n" << triangularPyramid[0][0];
-	*/
-	//triangularPyramid = basicTriangularPyramid;
-	//triangularPyramid = multiplyByMatrix(4, basicTriangularPyramid, translationMatrix(0,0,0));
-
-
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE);
-	glutInitWindowSize(640, 480);
-	glutCreateWindow("GLUT");
+	glutInitDisplayMode(GLUT_RGB);
+	glutInitWindowSize(Width, Height);
+	glutCreateWindow("Projeto CG");
+
 	glutDisplayFunc(display);
-	glutSpecialFunc(specialKeys);
+	//glutSpecialFunc(specialKeys);
 	glEnable(GL_DEPTH_TEST);
+
 	glutMainLoop();
 	return 0;
 
