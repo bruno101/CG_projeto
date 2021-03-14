@@ -111,17 +111,18 @@ c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(765): warning C4018:
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(780): warning C4305: '=': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(781): warning C4305: '=': truncation from 'double' to 'GLfloat'
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(782): warning C4305: '=': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(802): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(826): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(827): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(827): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(828): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(804): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(805): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(832): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(833): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(833): warning C4305: 'initializing': truncation from 'double' to 'GLfloat'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(834): warning C4305: 'argument': truncation from 'double' to 'float'
   ObjetoComFaces.cpp
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(15): warning C4018: '<': signed/unsigned mismatch
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(22): warning C4018: '<': signed/unsigned mismatch
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(111): warning C4018: '<': signed/unsigned mismatch
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(127): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(104): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(120): warning C4018: '<': signed/unsigned mismatch
 c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4800: 'float': forcing value to bool 'true' or 'false' (performance warning)
   c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
           with
@@ -137,35 +138,8 @@ c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warni
               _Ty=float,
               _Other=float
           ]
-  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(79): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
-  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(79): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
-c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(164): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(341): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
-          with
-          [
-              _This=float,
-              _Ty=int,
-              _Other=int
-          ]
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(340): note: see reference to function template instantiation 'std::_Tuple_val<_This>::_Tuple_val<_Ty>(_Other &&)' being compiled
-          with
-          [
-              _This=float,
-              _Ty=int,
-              _Other=int
-          ]
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(520): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
-          with
-          [
-              _Tag=std::_Unpack_tuple_t
-          ]
-  c:\program files (x86)\microsoft visual studio 14.0\vc\include\tuple(518): note: see reference to function template instantiation 'std::tuple<float>::tuple<std::_Unpack_tuple_t,int,0>(_Tag,std::tuple<int> &&)' being compiled
-          with
-          [
-              _Tag=std::_Unpack_tuple_t
-          ]
-  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(105): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<bool,int,0,0>(std::tuple<bool,int> &&)' being compiled
-  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(105): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<bool,int,0,0>(std::tuple<bool,int> &&)' being compiled
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(75): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
+  c:\users\bruno\onedrive\documentos\cg\cg_projeto\objetocomfaces.cpp(75): note: see reference to function template instantiation 'std::tuple<bool,float>::tuple<float,float,0,0>(std::tuple<float,float> &&)' being compiled
   Generating Code...
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.exe
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.pdb (Full PDB)

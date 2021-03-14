@@ -797,9 +797,15 @@ void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom,
 
 	float R, G, B;
 
+	float d0x, d0y, d0z, tam;
+
 	for (int i = 0; i < Height; i++) {
 		for (int j = 0; j < Width; j++) {
-			auto tup = corPixel(objetos, p0x, p0y, p0z, left+(right-left)*(0.5+j)/Width, bottom+(top-bottom)*(0.5+i)/Height, z);
+			d0x = left + (right - left)*(0.5 + j) / Width;
+			d0y = bottom + (top - bottom)*(0.5 + i) / Height;
+			d0z = z;
+			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
+			auto tup = corPixel(objetos, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
 			janela[i][j][1] = G;
