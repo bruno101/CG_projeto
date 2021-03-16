@@ -27,7 +27,107 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
-	copy(color, color+3, this->color);
+	vector<float> x(3);
+	vector<float> y(3);
+	
+	vector<float> areasFaces(size(faces));
+	for (int f = 0; f < size(faces); f++) {
+		areasFaces[f] = 0;
+		for (int v = 2; v < size(faces[f]); v++) {
+			x = this->diferencaVetores(vertices[faces[f][v-1]], vertices[faces[f][0]]);
+			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
+			areasFaces[f] += normaVetor(produtoVetorial(x, y));
+		}
+	}
+	this->areasFaces = areasFaces;
+
+	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		coresFaces[f][0] = color[0];
+		coresFaces[f][1] = color[1];
+		coresFaces[f][2] = color[2];
+	}
+	this->coresFaces = coresFaces;
+}
+
+ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<float> color)
+{
+	this->vertices = vertices;
+	this->faces = faces;
+
+	vector<float> somaVetoresVertices = { 0.0, 0.0, 0.0 };
+	for (int v = 0; v < size(vertices); v++) {
+		somaVetoresVertices = somaVetores(somaVetoresVertices, this->vertices[v]);
+	}
+	this->centro = multiplicaVetorPorEscalar(somaVetoresVertices, 1.0 / size(vertices));
+
+	float raio = 0.0;
+	float w;
+	for (int v = 0; v < size(vertices); v++) {
+		w = normaVetor(diferencaVetores(this->vertices[v], this->centro));
+		if (w > raio) {
+			raio = w;
+		}
+	}
+	this->raio = raio;
+
+	vector<float> x(3);
+	vector<float> y(3);
+
+	vector<float> areasFaces(size(faces));
+	for (int f = 0; f < size(faces); f++) {
+		areasFaces[f] = 0;
+		for (int v = 2; v < size(faces[f]); v++) {
+			x = this->diferencaVetores(vertices[faces[f][v - 1]], vertices[faces[f][0]]);
+			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
+			areasFaces[f] += normaVetor(produtoVetorial(x, y));
+		}
+	}
+	this->areasFaces = areasFaces;
+
+	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		coresFaces[f] = color;
+	}
+	this->coresFaces = coresFaces;
+}
+
+ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> colors)
+{
+	this->vertices = vertices;
+	this->faces = faces;
+
+	vector<float> somaVetoresVertices = { 0.0, 0.0, 0.0 };
+	for (int v = 0; v < size(vertices); v++) {
+		somaVetoresVertices = somaVetores(somaVetoresVertices, this->vertices[v]);
+	}
+	this->centro = multiplicaVetorPorEscalar(somaVetoresVertices, 1.0 / size(vertices));
+
+	float raio = 0.0;
+	float w;
+	for (int v = 0; v < size(vertices); v++) {
+		w = normaVetor(diferencaVetores(this->vertices[v], this->centro));
+		if (w > raio) {
+			raio = w;
+		}
+	}
+	this->raio = raio;
+
+	vector<float> x(3);
+	vector<float> y(3);
+
+	vector<float> areasFaces(size(faces));
+	for (int f = 0; f < size(faces); f++) {
+		areasFaces[f] = 0;
+		for (int v = 2; v < size(faces[f]); v++) {
+			x = this->diferencaVetores(vertices[faces[f][v - 1]], vertices[faces[f][0]]);
+			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
+			areasFaces[f] += normaVetor(produtoVetorial(x, y));
+		}
+	}
+	this->areasFaces = areasFaces;
+
+	this->coresFaces = colors;
 }
 
 vector<float> ObjetoComFaces::getNormalFace(int numFace) {
@@ -43,6 +143,32 @@ vector<float> ObjetoComFaces::getNormalFace(int numFace) {
 
 	return this->multiplicaVetorPorEscalar(vPerpendicular, 1/this->normaVetor(vPerpendicular));
 }
+
+bool ObjetoComFaces::estaDentroDaFace(vector<float> pInt, int numFace) {
+
+	float somaAreas = 0;
+
+	vector<float> v1(3), v2(3);
+
+	for (int i = 0; i < size(faces[numFace])-1; i++) {
+
+		v1 = diferencaVetores(this->vertices[faces[numFace][i]], pInt);
+		v2 = diferencaVetores(this->vertices[faces[numFace][i+1]], pInt);
+		somaAreas += this->normaVetor(this->produtoVetorial(v1,v2));
+
+	}
+
+	v1 = diferencaVetores(this->vertices[faces[numFace][size(faces[numFace])-1]], pInt);
+	v2 = diferencaVetores(this->vertices[faces[numFace][0]], pInt);
+	somaAreas += this->normaVetor(this->produtoVetorial(v1, v2));
+
+	if ((somaAreas - this->areasFaces[numFace]) < 0.001) {
+		return true;
+	}
+	return false;
+
+}
+
 
 tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, float p0z, float dx, float dy, float dz, int numFace) {
 
@@ -60,16 +186,24 @@ tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, flo
 	float B = dx*n[0]+dy*n[1]+dz*n[2];
 
 	if (B == 0) {
-		if (A == 0) {
-			//INFINITAS SOLUCOES - CHECAR SE UMA DELAS É VÁLIDA E ENCONTRAR A MENOR
-		}
+		//PARALELO
+		intersecta = false;
+	}
+	else {
+
+		t0 = -A / B;
+		float pIntX = p0x + t0*dx;
+		float pIntY = p0y + t0*dy;
+		float pIntZ = p0z + t0*dz;
+
+		if (this->estaDentroDaFace( { pIntX, pIntY, pIntZ }, numFace)) {
+			intersecta = true;
+			t = t0;
+		} 
 		else {
 			intersecta = false;
 		}
-	}
-	else {
-		t0 = -A / B;
-		//CHECAR SE PONTO GERADO POR T0 ESTÁ DENTRO DO LIMITE DA FACE
+
 	}
 
 	return make_tuple(intersecta, t);
@@ -82,7 +216,7 @@ bool ObjetoComFaces::podeTerIntersecao(float p0x, float p0y, float p0z, float dx
 	float B = 2*v[0]*dx + 2*v[1]*dy + 2*v[2]*dz;
 	float C = dx*dx + dy*dy + dz*dz;
 	float delta = B*B - 4*A*C;
-	if (delta >= 0) {
+	if (delta > 0) {
 		return true;
 	}	
 	return false;
@@ -115,7 +249,7 @@ tuple<bool, float> ObjetoComFaces::hasIntersection(float p0x, float p0y, float p
 
 }
 
-void ObjetoComFaces::paint() {
+/*void ObjetoComFaces::paint() {
 
 	for (int i = 0; i < size(this->faces); i++) {
 
@@ -144,4 +278,4 @@ void ObjetoComFaces::paint() {
 
 	}
 
-}
+}*/

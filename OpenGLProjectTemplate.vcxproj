@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cluster.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="ObjetoComFaces.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cluster.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="ObjetoComFaces.h" />
   </ItemGroup>

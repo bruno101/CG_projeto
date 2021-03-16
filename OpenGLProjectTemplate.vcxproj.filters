@@ -24,12 +24,18 @@
     <ClCompile Include="ObjetoComFaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cluster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objeto.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjetoComFaces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cluster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

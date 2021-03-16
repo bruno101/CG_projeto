@@ -6,6 +6,7 @@
 #include <math.h>
 #include <tuple>
 #include "ObjetoComFaces.h"
+#include "Cluster.h"
 
 using namespace std;
 
@@ -788,9 +789,9 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 }
 
-int Width = 100;
-int Height = 100;
-GLfloat janela[100][100][3];
+int Width = 400;
+int Height = 400;
+GLfloat janela[400][400][3];
 
 void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float z)
 {
@@ -835,12 +836,58 @@ void display()
 	GLfloat treeBrown[3] = { 119.0 / 256.0, 69.0 / 256.0, 19.0 / 256.0 };
 	
 	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	//ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	//ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	//ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	//ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Cluster arvore1 = Cluster({ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 });
 
-	vector<Objeto*> objetos = { &a1Tronco, /*&a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4*/ };
+	ObjetoComFaces a2Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-5.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
+	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Cluster arvore2 = Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
+
+	ObjetoComFaces a3Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-4.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
+	ObjetoComFaces a3Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a3Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a3Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a3Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Cluster arvore3 = Cluster({ &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4 });
+
+	ObjetoComFaces a4Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
+	ObjetoComFaces a4Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a4Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a4Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a4Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
+
+	ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
+	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a5Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });
+
+	/* I - UM OBJETO DE UMA FACE
+	ObjetoComFaces objeto2d = ObjetoComFaces({ { 4.0f, 2.5f, -7.19f },{ 3.0f, 5.0f, -7.19f },{ 2.9f, 5.0f, -7.19f },{ 3.9f, 2.5f, -7.19f } }, { { 0, 1, 2, 3 } }, treeBrown);
+	vector<Objeto*> objetos = { &objeto2d };*/
+
+	/* II - UM SEMICIRCULO
+	float radius = 0.25;
+	float pi = 3.1415926535;
+	vector<vector<float>> pontosSemicirculo(15, vector<float>(3));
+	vector<vector<int>> facesSemicirculo(13, vector<int>(3));
+	for (int i = 0; i < 15; i++) {
+		pontosSemicirculo[i] = { cos(i*pi / 14.0f)*radius + 3.25f, sin(i*pi / 14.0f)*radius + 0.6f, -7.19f };
+	}
+	for (int i = 0; i < 13; i++) {
+		facesSemicirculo[i] = { 0, i + 1, i + 2 };
+	}
+	ObjetoComFaces semicirculo = {pontosSemicirculo, facesSemicirculo, treeBrown };*/
+
+	vector<Objeto*> objetos = { &arvore1, &arvore2, &arvore3, &arvore4, &arvore5 };
 
 	lancarRaios(objetos, -1, 1, 0, 2, 0, 0, 0, -1);
 
