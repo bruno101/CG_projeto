@@ -27,27 +27,16 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
-	vector<float> x(3);
-	vector<float> y(3);
-	
-	vector<float> areasFaces(size(faces));
-	for (int f = 0; f < size(faces); f++) {
-		areasFaces[f] = 0;
-		for (int v = 2; v < size(faces[f]); v++) {
-			x = this->diferencaVetores(vertices[faces[f][v-1]], vertices[faces[f][0]]);
-			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
-			areasFaces[f] += normaVetor(produtoVetorial(x, y));
-		}
-	}
-	this->areasFaces = areasFaces;
-
 	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
 	for (int f = 0; f < size(faces); f++) {
 		coresFaces[f][0] = color[0];
 		coresFaces[f][1] = color[1];
 		coresFaces[f][2] = color[2];
+		normaisFaces[f] = getNormalFace(f);
 	}
 	this->coresFaces = coresFaces;
+	this->normaisFaces = normaisFaces;
 }
 
 ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<float> color)
@@ -70,20 +59,6 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 		}
 	}
 	this->raio = raio;
-
-	vector<float> x(3);
-	vector<float> y(3);
-
-	vector<float> areasFaces(size(faces));
-	for (int f = 0; f < size(faces); f++) {
-		areasFaces[f] = 0;
-		for (int v = 2; v < size(faces[f]); v++) {
-			x = this->diferencaVetores(vertices[faces[f][v - 1]], vertices[faces[f][0]]);
-			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
-			areasFaces[f] += normaVetor(produtoVetorial(x, y));
-		}
-	}
-	this->areasFaces = areasFaces;
 
 	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
 	for (int f = 0; f < size(faces); f++) {
@@ -113,20 +88,6 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
-	vector<float> x(3);
-	vector<float> y(3);
-
-	vector<float> areasFaces(size(faces));
-	for (int f = 0; f < size(faces); f++) {
-		areasFaces[f] = 0;
-		for (int v = 2; v < size(faces[f]); v++) {
-			x = this->diferencaVetores(vertices[faces[f][v - 1]], vertices[faces[f][0]]);
-			y = this->diferencaVetores(vertices[faces[f][v]], vertices[faces[f][0]]);
-			areasFaces[f] += normaVetor(produtoVetorial(x, y));
-		}
-	}
-	this->areasFaces = areasFaces;
-
 	this->coresFaces = colors;
 }
 
@@ -146,7 +107,42 @@ vector<float> ObjetoComFaces::getNormalFace(int numFace) {
 
 bool ObjetoComFaces::estaDentroDaFace(vector<float> pInt, int numFace) {
 
-	float somaAreas = 0;
+	int i1;
+	vector<float> n = this->normaisFaces[numFace];
+	vector<float> v, w;
+	v = diferencaVetores(pInt, vertices[faces[numFace][0]]);
+	for (int i = 0; i < size(faces[numFace]); i++) {
+		i1 = i + 1 < size(faces[numFace]) ? i + 1 : 0;
+		w = diferencaVetores(pInt, vertices[faces[numFace][i1]]);
+		if (produtoEscalar(n, produtoVetorial(v, w)) < 0) {
+			return false;
+		}
+		v = w;
+	}
+	return true;
+
+	/*int pos = 0, neg = 0, i1;
+	vector<float> edge1, edge2, v;
+
+	for (int i = 0; i < size(faces[numFace]); i++) {
+		i1 = (i + 1 < size(faces[numFace])) ? i + 1 : 0;
+		edge1 = diferencaVetores(vertices[faces[numFace][i]], vertices[faces[numFace][i1]]);
+		edge2 = diferencaVetores(pInt, vertices[faces[numFace][i]]);
+		v = produtoVetorial(edge1, edge2);
+		if (v[0]+v[1]+v[2] >= 0.0) {
+			pos++;
+		}
+		else {
+			neg++;
+		}
+		if ((pos > 0) && (neg > 0)) {
+			return false;
+		}
+	}
+
+	return true;*/
+
+	/*float somaAreas = 0;
 
 	vector<float> v1(3), v2(3);
 
@@ -165,7 +161,7 @@ bool ObjetoComFaces::estaDentroDaFace(vector<float> pInt, int numFace) {
 	if ((somaAreas - this->areasFaces[numFace]) < 0.001) {
 		return true;
 	}
-	return false;
+	return false;*/
 
 }
 
@@ -175,7 +171,12 @@ tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, flo
 	float intersecta;
 	float t = 100000;
 
-	vector<float> n = this->getNormalFace(numFace);
+	vector<float> n = this->normaisFaces[numFace];
+
+	if (produtoEscalar(n, { dx, dy, dz }) < 0) {
+		return make_tuple(false, t);
+	}
+
 	vector<float> v = this->diferencaVetores( { p0x, p0y, p0z }, this->vertices[this->faces[numFace][0]] );
 
 	float t0;

@@ -12,7 +12,7 @@ class ObjetoComFaces :
 {
 private:
 	vector<vector<int>> faces;
-	vector<float> areasFaces;
+	vector<vector<float>> normaisFaces;
 	vector<vector<float>> coresFaces;
 	GLfloat color[3];
 	vector<float> getNormalFace(int numFace);
