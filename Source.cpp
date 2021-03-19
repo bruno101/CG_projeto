@@ -762,21 +762,24 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 	bool x;
 	float y;
+	vector<float> z, w, cor, normal;
 
 	for (int i = 0; i < size(objetos); i++) {
-		tie(x, y) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
+		tie(x, y, z, w) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
 		if (x == true) {
-			intersecta = true;
 			if (y < t) {
+				intersecta = true;
 				t = y;
+				cor = z;
+				normal = w;
 			}
 		}
 	}
 
 	if (intersecta == true) {
-		R = 0.0;
-		G = 0.0;
-		B = 1.0;
+		R = cor[0];
+		G = cor[1];
+		B = cor[2];
 	} else {		
 		R = 0.529;
 		G = 0.808;
@@ -789,9 +792,9 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 }
 
-int Width = 400;
-int Height = 400;
-GLfloat janela[400][400][3];
+int Width = 200;
+int Height = 200;
+GLfloat janela[200][200][3];
 
 void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float z)
 {
@@ -802,9 +805,9 @@ void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom,
 
 	for (int i = 0; i < Height; i++) {
 		for (int j = 0; j < Width; j++) {
-			d0x = left + (right - left)*(0.5 + j) / Width;
-			d0y = bottom + (top - bottom)*(0.5 + i) / Height;
-			d0z = z;
+			d0x = (left + (right - left)*(0.5 + j) / Width) - p0x;
+			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
+			d0z = z - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
 			auto tup = corPixel(objetos, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
@@ -830,45 +833,105 @@ void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom,
 
 void display()
 {
-	vector<vector<float>> topoArvore = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-0.25, 1.0, -0.25), scaleMatrix(0.6, 0.8, 0.6)));
-	GLfloat pineGreen[3] = { 0.004, 0.475, 0.318 };
-	vector<vector<float>> troncoArvore = multiplyByMatrix(8, basicCube, scaleMatrix(0.1, 1.0, 0.1));
-	GLfloat treeBrown[3] = { 119.0 / 256.0, 69.0 / 256.0, 19.0 / 256.0 };
+
+	//definindo cores usadas
 	
-	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	vector<float> pineGreen = { 0.004f, 0.475f, 0.318f };
+	vector<float> lightYellow = { 255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f };
+	vector<float> treeBrown = { 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f };
+	vector<float> crimson = { 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f };
+	vector<float> brown = { 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f };
+	vector<float> blue = { 140.0f / 255.0f,210.0f / 255.0f,255.0f / 255.0f };
+
+	//faces para figuras basicas
+
+	vector<vector<int>> boxFaces = { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } };
+	vector<vector<int>> triangularPyramidFaces = { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } };
+	vector<vector<int>> squarePyramidFaces = { {0,1,2,3},{1,2,4},{2,3,4},{3,0,4},{0,1,4} };
+	vector<vector<int>> roofFaces = { {0,1,2,3},{5,1,2},{0,4,3},{5,2,3,4},{0,1,5,4} };
+
+	//figuras base para pinheiros
+
+	vector<vector<float>> topoArvore = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-0.25, 1.0, -0.25), scaleMatrix(0.6, 0.8, 0.6)));
+	vector<vector<float>> troncoArvore = multiplyByMatrix(8, basicCube, scaleMatrix(0.1, 1.0, 0.1));
+
+	//desenhando pinheiros
+	
+	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 	Cluster arvore1 = Cluster({ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 });
 
-	ObjetoComFaces a2Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-5.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a2Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-5.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 	Cluster arvore2 = Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
 
-	ObjetoComFaces a3Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-4.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	ObjetoComFaces a3Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a3Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a3Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a3Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a3Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-4.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a3Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a3Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a3Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a3Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 	Cluster arvore3 = Cluster({ &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4 });
 
-	ObjetoComFaces a4Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	ObjetoComFaces a4Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a4Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a4Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a4Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a4Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a4Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a4Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a4Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a4Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 	Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
 
-	ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -7.0)), { { 4,0,1,5 },{ 5,1,2,6 },{ 6,2,3,7 },{ 7,3,0,4 },{ 5,6,7,4 },{ 1,0,3,2 } }, treeBrown);
-	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a5Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
+	ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a5Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });
+
+	//desenhando igreja
+
+	ObjetoComFaces baseTorre = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.0, 0.0, -7.2), scaleMatrix(0.8, 5.0, 0.8))), boxFaces, lightYellow);
+	ObjetoComFaces topoTorre = ObjetoComFaces(multiplyByMatrix(5, basicSquarePyramid, multiplyMatrix(translationMatrix(2.05, 5.0, -7.15), scaleMatrix(0.7, 1.7, 0.7))), squarePyramidFaces, crimson);
+	ObjetoComFaces cruzParteVertical = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.385, 6.7, -6.815), scaleMatrix(0.03, 1.0, 0.03))), boxFaces, brown);
+	ObjetoComFaces cruzParteHorizontal = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.15, 7.3, -6.95), scaleMatrix(0.5, 0.03, 0.03))), boxFaces, brown);
+	ObjetoComFaces baseIgreja = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.0, 0.0, -10.2), scaleMatrix(2.0, 2.5, 3.0))), boxFaces , lightYellow);
+	ObjetoComFaces topoIgreja = ObjetoComFaces(multiplyByMatrix(6, roof, multiplyMatrix(translationMatrix(2.0, 2.5, -10.2), scaleMatrix(2.0, 2.5, 3.0))), roofFaces, {lightYellow, lightYellow, lightYellow, crimson, crimson});
+
+	//desenhando extremidades do telhado
+
+	ObjetoComFaces telhado = ObjetoComFaces({ { 4.0f, 2.5f, -7.19f },{ 3.0f, 5.0f, -7.19f },{ 2.9f, 5.0f, -7.19f },{ 3.9f, 2.5f, -7.19f } }, { { 0, 1, 2, 3 } }, crimson);
+
+	//desenhando janelas
+
+	ObjetoComFaces janelaTorreFrenteAlto = ObjetoComFaces({ { 2.6f, 3.6f, -6.39f },{ 2.6f, 4.4f, -6.39f },{ 2.2f, 4.4f, -6.39f },{ 2.2f, 3.6f, -6.39f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaTorreEsquerdaAlto = ObjetoComFaces({ { 1.99f, 3.6f, -6.6f },{ 1.99f, 4.4f, -6.6f },{ 1.99f, 4.4f, -7.0f },{ 1.99f, 3.6f, -7.0f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaTorreFrenteBaixo = ObjetoComFaces({ { 2.6f, 1.2f, -6.39f },{ 2.6f, 2.0f, -6.39f },{ 2.2f, 2.0f, -6.39f },{ 2.2f, 1.2f, -6.39f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaTorreEsquerdaBaixo = ObjetoComFaces({ { 1.99f, 1.2f, -6.6f },{ 1.99f, 2.0f, -6.6f },{ 1.99f, 2.0f, -7.0f },{ 1.99f, 1.2f, -7.0f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaIgrejaEsquerdaFrente = ObjetoComFaces({ { 1.99f, 1.2f, -7.4f },{ 1.99f, 2.0f, -7.4f },{ 1.99f, 2.0f, -7.8f },{ 1.99f, 1.2f, -7.8f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaIgrejaEsquerdaMeio = ObjetoComFaces({ { 1.99f, 1.2f, -8.4f },{ 1.99f, 2.0f, -8.4f },{ 1.99f, 2.0f, -8.8f },{ 1.99f, 1.2f, -8.8f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaIgrejaEsquerdaTras = ObjetoComFaces({ { 1.99f, 1.2f, -9.4f },{ 1.99f, 2.0f, -9.4f },{ 1.99f, 2.0f, -9.8f },{ 1.99f, 1.2f, -9.8f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaIgrejaFrente = ObjetoComFaces({ { 3.6f, 1.2f, -7.19f },{ 3.6f, 2.0f, -7.19f },{ 3.2f, 2.0f, -7.19f },{ 3.2f, 1.2f, -7.19f } }, { { 0, 1, 2, 3 } }, blue);
+
+	Cluster topoTorreCluster = Cluster({ &topoTorre, &cruzParteVertical, &cruzParteHorizontal });
+	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente });
+
+
+	/*
+
+	//desenhando janelas
+
+	glBegin(GL_QUADS);
+	glColor3fv(blue);
+	glVertex3f(3.6, 1.2, -7.19);
+	glVertex3f(3.6, 2.0, -7.19);
+	glVertex3f(3.2, 2.0, -7.19);
+	glVertex3f(3.2, 1.2, -7.19);
+	glEnd();*/
+	
 
 	/* I - UM OBJETO DE UMA FACE
 	ObjetoComFaces objeto2d = ObjetoComFaces({ { 4.0f, 2.5f, -7.19f },{ 3.0f, 5.0f, -7.19f },{ 2.9f, 5.0f, -7.19f },{ 3.9f, 2.5f, -7.19f } }, { { 0, 1, 2, 3 } }, treeBrown);
@@ -887,7 +950,7 @@ void display()
 	}
 	ObjetoComFaces semicirculo = {pontosSemicirculo, facesSemicirculo, treeBrown };*/
 
-	vector<Objeto*> objetos = { &arvore1, &arvore2, &arvore3, &arvore4, &arvore5 };
+	vector<Objeto*> objetos = { /*&arvore1, &arvore2, &arvore3, &arvore4, &arvore5,*/ &igreja, &topoTorreCluster };
 
 	lancarRaios(objetos, -1, 1, 0, 2, 0, 0, 0, -1);
 

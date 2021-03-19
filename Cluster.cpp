@@ -55,29 +55,34 @@ bool Cluster::podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float
 }
 
 
-tuple<bool, float> Cluster::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz) 
+tuple<bool, float, vector<float>, vector<float>> Cluster::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz) 
 {
 
 	bool intersecta = false;
 	float t = 100000;
+	vector<float> cor(3);
+	vector<float> normal(3);
 
 	if (this->podeTerIntersecao( p0x, p0y, p0z, dx, dy, dz)) {
 
 		bool x;
 		float y;
+		vector<float> z, w;
 
 		for (int i = 0; i < size(objetos); i++) {
-			tie(x, y) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
+			tie(x, y, z, w) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
 			if (x == true) {
-				intersecta = true;
 				if (y < t) {
+					intersecta = true;
 					t = y;
+					cor = z;
+					normal = w;
 				}
 			}
 		}
 
 	}
 
-	return make_tuple(intersecta, t);
+	return make_tuple(intersecta, t, cor, normal);
 
 }

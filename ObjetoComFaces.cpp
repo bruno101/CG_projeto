@@ -8,6 +8,7 @@
 
 ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, GLfloat color[3])
 {
+	this->tipoObjeto = "Objeto com Faces";
 	this->vertices = vertices;
 	this->faces = faces;
 
@@ -27,20 +28,21 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
-	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
 	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
 	for (int f = 0; f < size(faces); f++) {
-		coresFaces[f][0] = color[0];
-		coresFaces[f][1] = color[1];
-		coresFaces[f][2] = color[2];
 		normaisFaces[f] = getNormalFace(f);
 	}
-	this->coresFaces = coresFaces;
 	this->normaisFaces = normaisFaces;
+	vector<float> cor(3);
+	cor[0] = color[0];
+	cor[1] = color[1];
+	cor[2] = color[2];
+	this->cor = cor;
 }
 
 ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<float> color)
 {
+	this->tipoObjeto = "Objeto com Faces";
 	this->vertices = vertices;
 	this->faces = faces;
 
@@ -60,17 +62,20 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
-	vector<vector<float>> coresFaces(size(faces), vector<float>(3));
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
 	for (int f = 0; f < size(faces); f++) {
-		coresFaces[f] = color;
+		normaisFaces[f] = getNormalFace(f);
 	}
-	this->coresFaces = coresFaces;
+	this->normaisFaces = normaisFaces;
+	this->cor = color;
 }
 
 ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> colors)
 {
+	this->tipoObjeto = "Objeto com Faces";
 	this->vertices = vertices;
 	this->faces = faces;
+	this->objetoComMaisDeUmaCor = true;
 
 	vector<float> somaVetoresVertices = { 0.0, 0.0, 0.0 };
 	for (int v = 0; v < size(vertices); v++) {
@@ -88,6 +93,11 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 	}
 	this->raio = raio;
 
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		normaisFaces[f] = getNormalFace(f);
+	}
+	this->normaisFaces = normaisFaces;
 	this->coresFaces = colors;
 }
 
@@ -173,7 +183,7 @@ tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, flo
 
 	vector<float> n = this->normaisFaces[numFace];
 
-	if (produtoEscalar(n, { dx, dy, dz }) < 0) {
+	if (produtoEscalar(n, { dx, dy, dz }) >= 0.0) {
 		return make_tuple(false, t);
 	}
 
@@ -223,30 +233,45 @@ bool ObjetoComFaces::podeTerIntersecao(float p0x, float p0y, float p0z, float dx
 	return false;
 }
 
-tuple<bool, float> ObjetoComFaces::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz)
+tuple<bool, float, vector<float>, vector<float>> ObjetoComFaces::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
 
-	bool intersecta;
+	bool intersecta = false;
 	float t = 100000;
+	vector<float> cor(3);
+	vector<float> normal(3);
 
 	if (!(ObjetoComFaces::podeTerIntersecao(p0x, p0y, p0z, dx, dy, dz))) {
-		return make_tuple(false, t);
+		return make_tuple(false, t, cor, normal);
 	}
 
 	bool x;
 	float y;
+	int numFaceIntersecao;
 
 	for (int i = 0; i < size(this->faces); i++) {
 		tie(x, y) = this->hasIntersectionFace(p0x, p0y, p0z, dx, dy, dz, i);
-		if (x == true) {
+		if (x == true && y < t) {
 			intersecta = true;
-			if (y < t) {
-				t = y;
-			}
+			t = y;
+			numFaceIntersecao = i;
 		}
 	}
 
-	return make_tuple(intersecta, t);
+	if (intersecta) {
+		normal = normaisFaces[numFaceIntersecao];
+		if (this->objetoComMaisDeUmaCor == true) {
+			cor = this->coresFaces[numFaceIntersecao];
+		}
+		else {
+			cor[0] = this->cor[0];
+			cor[1] = this->cor[1];
+			cor[2] = this->cor[2];
+		}
+
+	}
+
+	return make_tuple(intersecta, t, cor, normal);
 
 }
 

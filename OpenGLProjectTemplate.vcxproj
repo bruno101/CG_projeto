@@ -29,9 +29,6 @@
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="ObjetoComFaces.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EF686667-8040-4D20-AEA3-6AF3B7887A6A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
