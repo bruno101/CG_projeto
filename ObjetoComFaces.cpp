@@ -5,42 +5,7 @@
 #include <GL/glut.h>
 #include <iostream>
 
-
-ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, GLfloat color[3])
-{
-	this->tipoObjeto = "Objeto com Faces";
-	this->vertices = vertices;
-	this->faces = faces;
-
-	vector<float> somaVetoresVertices = { 0.0, 0.0, 0.0 };
-	for (int v = 0; v < size(vertices); v++) {
-		somaVetoresVertices = somaVetores(somaVetoresVertices, this->vertices[v]);
-	}
-	this->centro = multiplicaVetorPorEscalar(somaVetoresVertices, 1.0/size(vertices));
-
-	float raio = 0.0;
-	float w;
-	for (int v = 0; v < size(vertices); v++) {
-		w = normaVetor(diferencaVetores(this->vertices[v], this->centro));
-		if (w > raio) {
-			raio = w;
-		}
-	}
-	this->raio = raio;
-
-	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
-	for (int f = 0; f < size(faces); f++) {
-		normaisFaces[f] = getNormalFace(f);
-	}
-	this->normaisFaces = normaisFaces;
-	vector<float> cor(3);
-	cor[0] = color[0];
-	cor[1] = color[1];
-	cor[2] = color[2];
-	this->cor = cor;
-}
-
-ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<float> color)
+ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> material)
 {
 	this->tipoObjeto = "Objeto com Faces";
 	this->vertices = vertices;
@@ -67,15 +32,15 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 		normaisFaces[f] = getNormalFace(f);
 	}
 	this->normaisFaces = normaisFaces;
-	this->cor = color;
+	this->material = material;
 }
 
-ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> colors)
+ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<vector<float>>> materiaisFaces)
 {
 	this->tipoObjeto = "Objeto com Faces";
 	this->vertices = vertices;
 	this->faces = faces;
-	this->objetoComMaisDeUmaCor = true;
+	this->objetoComMaisDeUmMaterial = true;
 
 	vector<float> somaVetoresVertices = { 0.0, 0.0, 0.0 };
 	for (int v = 0; v < size(vertices); v++) {
@@ -98,7 +63,7 @@ ObjetoComFaces::ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int
 		normaisFaces[f] = getNormalFace(f);
 	}
 	this->normaisFaces = normaisFaces;
-	this->coresFaces = colors;
+	this->materiaisFaces = materiaisFaces;
 }
 
 vector<float> ObjetoComFaces::getNormalFace(int numFace) {
@@ -233,16 +198,16 @@ bool ObjetoComFaces::podeTerIntersecao(float p0x, float p0y, float p0z, float dx
 	return false;
 }
 
-tuple<bool, float, vector<float>, vector<float>> ObjetoComFaces::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz)
+tuple<bool, float, vector<vector<float>>, vector<float>> ObjetoComFaces::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
 
 	bool intersecta = false;
 	float t = 100000;
-	vector<float> cor(3);
+	vector<vector<float>> material(3, vector<float>(3));
 	vector<float> normal(3);
 
 	if (!(ObjetoComFaces::podeTerIntersecao(p0x, p0y, p0z, dx, dy, dz))) {
-		return make_tuple(false, t, cor, normal);
+		return make_tuple(false, t, material, normal);
 	}
 
 	bool x;
@@ -260,18 +225,16 @@ tuple<bool, float, vector<float>, vector<float>> ObjetoComFaces::hasIntersection
 
 	if (intersecta) {
 		normal = normaisFaces[numFaceIntersecao];
-		if (this->objetoComMaisDeUmaCor == true) {
-			cor = this->coresFaces[numFaceIntersecao];
+		if (this->objetoComMaisDeUmMaterial == true) {
+			material = this->materiaisFaces[numFaceIntersecao];
 		}
 		else {
-			cor[0] = this->cor[0];
-			cor[1] = this->cor[1];
-			cor[2] = this->cor[2];
+			material = this->material;
 		}
 
 	}
 
-	return make_tuple(intersecta, t, cor, normal);
+	return make_tuple(intersecta, t, material, normal);
 
 }
 

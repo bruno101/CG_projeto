@@ -750,8 +750,11 @@ void displayOld()
 
 }
 
-tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> luz, float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
+
+	vector<float> direcaoLuz = { -1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
+	vector<float> direcaoLuzR = { 1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
 
 	GLfloat R;
 	GLfloat G;
@@ -762,7 +765,8 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 	bool x;
 	float y;
-	vector<float> z, w, cor, normal;
+	vector<vector<float>> z, material;
+	vector<float> w, normal;
 
 	for (int i = 0; i < size(objetos); i++) {
 		tie(x, y, z, w) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
@@ -770,7 +774,7 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 			if (y < t) {
 				intersecta = true;
 				t = y;
-				cor = z;
+				material = z;
 				normal = w;
 			}
 		}
@@ -778,23 +782,32 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 	if (intersecta == true) {
 		//OBJETO
-		R = cor[0];
-		G = cor[1];
-		B = cor[2];
+		float fatorAnguloD = abs( cos(normal[0] * direcaoLuz[0] + normal[1] * direcaoLuz[1] + normal[2] * direcaoLuz[2]) );
+		float fatorAnguloR = pow(cos( direcaoLuzR[0]*(-dx) - direcaoLuzR[1]*(-dy) - direcaoLuzR[2]*(-dz)), 4);
+		if (fatorAnguloR < 0) {
+			fatorAnguloR = 0;
+		}
+		R = material[0][0]*luz[0][0] + material[1][0] * luz[1][0] * fatorAnguloD + material[2][0] * luz[2][0] * fatorAnguloR;
+		G = material[0][1]*luz[0][1] + material[1][1] * luz[1][1] * fatorAnguloD + material[2][1] * luz[2][1] * fatorAnguloR;
+		B = material[0][2]*luz[0][2] + material[1][2] * luz[1][2] * fatorAnguloD + material[2][2] * luz[2][2] * fatorAnguloR;
 	}
 	else if (dy < 0.0) {
 		float zIntChao = p0z + dz*(-p0y / dy);
 		if (zIntChao > 0) {
 			//MAR
+			float fatorAnguloR = pow(cos(direcaoLuzR[0] * (-dx) - direcaoLuzR[1] * (-dy) - direcaoLuzR[2] * (-dz)), 4);
+			if (fatorAnguloR < 0) {
+				fatorAnguloR = 0;
+			}
 			R = 0.0;
-			G = 0.412;
-			B = 0.58;
+			G = 0.412*0.3+0.412*0.7*fatorAnguloR;
+			B = 0.58*0.3+0.58*0.7*fatorAnguloR;
 		}
 		else {
 			//GRAMA
 			R = 0.0;
-			G = 154.0 / 256.0;
-			B = 23.0 / 256.0;
+			G = 154.0*0.9 / 256.0;
+			B = 23.0*0.9 / 256.0;
 		}
 	}
 	else {
@@ -808,11 +821,11 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, float p0x, fl
 
 }
 
-int Width = 200;
-int Height = 200;
-GLfloat janela[200][200][3];
+int Width = 500;
+int Height = 500;
+GLfloat janela[500][500][3];
 
-void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
+void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> luz, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
 {
 
 	float R, G, B;
@@ -825,7 +838,7 @@ void lancarRaios(vector<Objeto*> objetos, float left, float right, float bottom,
 			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
 			d0z = (zLeft + (zRight - zLeft)*(0.5 + j) / Width) - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
-			auto tup = corPixel(objetos, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
+			auto tup = corPixel(objetos, luz, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
 			janela[i][j][1] = G;
@@ -852,16 +865,16 @@ void display()
 
 	//definindo cores usadas
 	
-	vector<float> pineGreen = { 0.004f, 0.475f, 0.318f };
-	vector<float> lightYellow = { 255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f };
-	vector<float> treeBrown = { 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f };
-	vector<float> crimson = { 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f };
-	vector<float> brown = { 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f };
-	vector<float> blue = { 140.0f / 255.0f,210.0f / 255.0f,255.0f / 255.0f };
-	vector<float> darkBlue = { 0.0f, 0.0f, 128.0f / 256.0f };
-	vector<float> greenBrown = { 74.0f / 256.0f, 67.0f / 256.0f, 0.0f };
-	vector<float> red = { 0.659f, 0.0f, 0.0f };
-	vector<float> mountainBlue = { 0.6314f, 0.2392f, 0.1765f };
+	vector<vector<float>> pineGreen = { { 0.004f, 0.475f, 0.318f },{ 0.004f, 0.475f, 0.318f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> lightYellow = { {255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f},{ 255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f }, {0.0f, 0.0f, 0.0f} };
+	vector<vector<float>> treeBrown = { { 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f },{ 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> crimson = { { 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f },{ 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> brown = { { 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f },{ 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> blueGlass = { { 140.0f / 255.0f,210.0f / 255.0f,255.0f / 255.0f },{ 0.0f, 0.0f, 0.0f },{ 140.0f / 255.0f,210.0f / 255.0f,255.0f / 255.0f }, };
+	vector<vector<float>> darkBlue = { { 0.0f, 0.0f, 128.0f / 256.0f },{ 0.0f, 0.0f, 128.0f / 256.0f },{ 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> greenBrown = { { 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> red = { { 0.659f, 0.0f, 0.0f },{ 0.659f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> mountainBlue = { { 0.6314f, 0.2392f, 0.1765f },{ 0.6314f, 0.2392f, 0.1765f }, { 0.0f, 0.0f, 0.0f } };
 
 	//faces para figuras basicas
 
@@ -927,14 +940,14 @@ void display()
 
 	//desenhando janelas
 
-	ObjetoComFaces janelaTorreFrenteAlto = ObjetoComFaces({ { 2.6f, 3.6f, -6.39f },{ 2.6f, 4.4f, -6.39f },{ 2.2f, 4.4f, -6.39f },{ 2.2f, 3.6f, -6.39f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaTorreEsquerdaAlto = ObjetoComFaces({ { 1.99f, 3.6f, -6.6f },{ 1.99f, 4.4f, -6.6f },{ 1.99f, 4.4f, -7.0f },{ 1.99f, 3.6f, -7.0f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaTorreFrenteBaixo = ObjetoComFaces({ { 2.6f, 1.2f, -6.39f },{ 2.6f, 2.0f, -6.39f },{ 2.2f, 2.0f, -6.39f },{ 2.2f, 1.2f, -6.39f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaTorreEsquerdaBaixo = ObjetoComFaces({ { 1.99f, 1.2f, -6.6f },{ 1.99f, 2.0f, -6.6f },{ 1.99f, 2.0f, -7.0f },{ 1.99f, 1.2f, -7.0f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaIgrejaEsquerdaFrente = ObjetoComFaces({ { 1.99f, 1.2f, -7.4f },{ 1.99f, 2.0f, -7.4f },{ 1.99f, 2.0f, -7.8f },{ 1.99f, 1.2f, -7.8f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaIgrejaEsquerdaMeio = ObjetoComFaces({ { 1.99f, 1.2f, -8.4f },{ 1.99f, 2.0f, -8.4f },{ 1.99f, 2.0f, -8.8f },{ 1.99f, 1.2f, -8.8f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaIgrejaEsquerdaTras = ObjetoComFaces({ { 1.99f, 1.2f, -9.4f },{ 1.99f, 2.0f, -9.4f },{ 1.99f, 2.0f, -9.8f },{ 1.99f, 1.2f, -9.8f } }, { { 0, 1, 2, 3 } }, blue);
-	ObjetoComFaces janelaIgrejaFrente = ObjetoComFaces({ { 3.6f, 1.2f, -7.19f },{ 3.6f, 2.0f, -7.19f },{ 3.2f, 2.0f, -7.19f },{ 3.2f, 1.2f, -7.19f } }, { { 0, 1, 2, 3 } }, blue);
+	ObjetoComFaces janelaTorreFrenteAlto = ObjetoComFaces({ { 2.6f, 3.6f, -6.39f },{ 2.6f, 4.4f, -6.39f },{ 2.2f, 4.4f, -6.39f },{ 2.2f, 3.6f, -6.39f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaTorreEsquerdaAlto = ObjetoComFaces({ { 1.99f, 3.6f, -6.6f },{ 1.99f, 4.4f, -6.6f },{ 1.99f, 4.4f, -7.0f },{ 1.99f, 3.6f, -7.0f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaTorreFrenteBaixo = ObjetoComFaces({ { 2.6f, 1.2f, -6.39f },{ 2.6f, 2.0f, -6.39f },{ 2.2f, 2.0f, -6.39f },{ 2.2f, 1.2f, -6.39f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaTorreEsquerdaBaixo = ObjetoComFaces({ { 1.99f, 1.2f, -6.6f },{ 1.99f, 2.0f, -6.6f },{ 1.99f, 2.0f, -7.0f },{ 1.99f, 1.2f, -7.0f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaIgrejaEsquerdaFrente = ObjetoComFaces({ { 1.99f, 1.2f, -7.4f },{ 1.99f, 2.0f, -7.4f },{ 1.99f, 2.0f, -7.8f },{ 1.99f, 1.2f, -7.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaIgrejaEsquerdaMeio = ObjetoComFaces({ { 1.99f, 1.2f, -8.4f },{ 1.99f, 2.0f, -8.4f },{ 1.99f, 2.0f, -8.8f },{ 1.99f, 1.2f, -8.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaIgrejaEsquerdaTras = ObjetoComFaces({ { 1.99f, 1.2f, -9.4f },{ 1.99f, 2.0f, -9.4f },{ 1.99f, 2.0f, -9.8f },{ 1.99f, 1.2f, -9.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces janelaIgrejaFrente = ObjetoComFaces({ { 3.6f, 1.2f, -7.19f },{ 3.6f, 2.0f, -7.19f },{ 3.2f, 2.0f, -7.19f },{ 3.2f, 1.2f, -7.19f } }, { { 0, 1, 2, 3 } }, blueGlass);
 
 	Cluster topoTorreCluster = Cluster({ &topoTorre, &cruzParteVertical, &cruzParteHorizontal });
 	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente });
@@ -971,9 +984,13 @@ void display()
 	ObjetoComFaces montanha3 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(32.0, 0.0, -81.0), scaleMatrix(19.0, 11.0, 12.0))), triangularPyramidFaces, mountainBlue);
 	ObjetoComFaces montanha4 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(14.0, 0.0, -82.0), scaleMatrix(24.0, 10.0, 7.0))), triangularPyramidFaces, mountainBlue);
 
-	vector<Objeto*> objetos = { &arvore1, &arvore2, &arvore3, &arvore4, &arvore5, &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4 };
+	vector<Objeto*> objetos = { &igreja , &arvore1, &arvore2, &arvore3, &arvore4, &arvore5, &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4 };
 
-	lancarRaios(objetos, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
+	//luz ambiente, difusa e especular
+	vector<vector<float>> luz = { {0.1f, 0.1f, 0.1f}, {0.9f, 0.9f, 0.9f}, {0.9f, 0.9f, 0.9f} };
+
+	lancarRaios(objetos, luz, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
+
 
 }
 
