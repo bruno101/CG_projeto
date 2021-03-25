@@ -19,13 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Cilindro.cpp" />
     <ClCompile Include="Cluster.cpp" />
+    <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="Esfera.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="ObjetoComFaces.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cilindro.h" />
     <ClInclude Include="Cluster.h" />
+    <ClInclude Include="Cone.h" />
+    <ClInclude Include="Esfera.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="ObjetoComFaces.h" />
   </ItemGroup>

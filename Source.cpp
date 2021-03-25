@@ -7,6 +7,9 @@
 #include <tuple>
 #include "ObjetoComFaces.h"
 #include "Cluster.h"
+#include "Cilindro.h"
+#include "Cone.h"
+#include "Esfera.h"
 
 using namespace std;
 
@@ -114,6 +117,12 @@ vector<vector<float>> rotationMatrixZ(float az, vector<float> pivot = { 0, 0, 0 
 
 vector<vector<float>> rotationMatrix(float ax, float ay, float az, vector<float> pivot = { 0,0,0 }) {
 	vector<vector<float>> M = multiplyMatrix(multiplyMatrix(rotationMatrixX(ax, pivot), rotationMatrixY(ay, pivot)), rotationMatrixZ(az, pivot));
+	return M;
+}
+
+vector<vector<float>> cisalhamento() {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	//IMPLEMENTAR
 	return M;
 }
 
@@ -800,8 +809,8 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 				fatorAnguloR = 0;
 			}
 			R = 0.0;
-			G = 0.412*0.3+0.412*0.7*fatorAnguloR;
-			B = 0.58*0.3+0.58*0.7*fatorAnguloR;
+			G = 0.412*0.1+0.412*0.9*fatorAnguloR;
+			B = 0.58*0.1+0.58*0.9*fatorAnguloR;
 		}
 		else {
 			//GRAMA
@@ -821,9 +830,9 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 
 }
 
-int Width = 500;
-int Height = 500;
-GLfloat janela[500][500][3];
+int Width = 150;
+int Height = 150;
+GLfloat janela[150][150][3];
 
 void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> luz, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
 {
@@ -984,7 +993,10 @@ void display()
 	ObjetoComFaces montanha3 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(32.0, 0.0, -81.0), scaleMatrix(19.0, 11.0, 12.0))), triangularPyramidFaces, mountainBlue);
 	ObjetoComFaces montanha4 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(14.0, 0.0, -82.0), scaleMatrix(24.0, 10.0, 7.0))), triangularPyramidFaces, mountainBlue);
 
-	vector<Objeto*> objetos = { &igreja , &arvore1, &arvore2, &arvore3, &arvore4, &arvore5, &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4 };
+	//Cilindro topoCilindroArvore = Cilindro({ 0.0,2.0,-10.0 }, { 0.0, 0.0, -1.0 }, 5.0, 1.0, pineGreen);
+	Cone topoConeArvore = Cone({ 0.0,1.0,-10.0 }, { 0.0, 1.0, 0.0 }, 5.0, 1.0, pineGreen);
+
+	vector<Objeto*> objetos = { &topoConeArvore, /*&igreja , &arvore1, &arvore2, &arvore3, &arvore4, &arvore5, &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
 
 	//luz ambiente, difusa e especular
 	vector<vector<float>> luz = { {0.1f, 0.1f, 0.1f}, {0.9f, 0.9f, 0.9f}, {0.9f, 0.9f, 0.9f} };

@@ -22,7 +22,6 @@ protected:
 	float raio;
 	vector<vector<float>> material;
 	bool objetoComMaisDeUmMaterial = false;
-	virtual bool podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz) = 0;
 	float produtoEscalar(vector<float> x, vector<float> y);
 	vector<float> produtoVetorial(vector<float> x, vector<float> y);
 	vector<float> somaVetores(vector<float> x, vector<float> y);
