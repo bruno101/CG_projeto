@@ -35,7 +35,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 	float delta = B * B - 4 * A * C;
 	vector<float> normal;
 
-	if (delta <= 0) {
+	if (delta < 0) {
 		t0 = 10000;
 	}
 	else if (delta == 0) {
@@ -61,7 +61,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 		t0 = fmin(tA, tB);
 	}
 
-	//Checando interseção com faces
+	//Checando interseÃ§Ã£o com faces
 
 	//face 1
 
