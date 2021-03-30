@@ -37,7 +37,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cone::hasIntersection(f
 	float delta = B * B - 4 * A * C;
 	vector<float> normal;
 
-	if (delta <= 0) {
+	if (delta < 0) {
 		t0 = 10000;
 	}
 	else if (delta == 0) {
@@ -70,7 +70,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cone::hasIntersection(f
 
 	if (t0 < 10000) {
 
-		//Checando interseção com face
+		//Checando interseÃ§Ã£o com face
 
 		float t1;
 
