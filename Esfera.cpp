@@ -19,5 +19,9 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Esfera::hasIntersection
 	vector<float> w = this->diferencaVetores({ p0x,p0y,p0z }, this->centro);
 	vector<float> dr = { dx, dy, dz };
 	
-	float A = produtoEscalar(
+	float A = produtoEscalar(dr, dr);
+	float B = 2*produtoEscalar(w, dr);
+	float C = produtoEscalar(w, w) - R*R;
+	
+	
 }
