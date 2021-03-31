@@ -11,7 +11,7 @@ Esfera::Esfera(vector<float> centro, float R, vector<vector<float>> material)
 
 
 vector<float> Esfera::getNormal(vector<float> ponto) {
-	vector<floa> w = this->diferencaVetores(ponto, this->centro);
+	vector<float> w = this->diferencaVetores(ponto, this->centro);
 	return this->multiplicaVetorPorEscalar(w, 1.0/normaVetor(w));
 }
 
