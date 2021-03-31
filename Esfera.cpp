@@ -5,7 +5,7 @@
 Esfera::Esfera(vector<float> centro, float R, vector<vector<float>> material)
 {
 	this->centro = centro;
-	this.R = R;
+	this->R = R;
 	this.material = material;
 }
 
