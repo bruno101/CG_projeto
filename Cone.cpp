@@ -112,3 +112,21 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cone::hasIntersection(f
 	return make_tuple(false, t0, this->material, normal);
 
 }
+
+vector<vector<float>> Cone::getListOfPoints() {
+	return { this->centro, somaVetores(this->centro, this->Hdir), this->V };
+}
+
+void Cone::setListOfPoints(vector<vector<float>> newPoints) {
+	this->centro = newPoints[0];
+	this->Hdir = diferencaVetores(newPoints[1], this->centro);
+	this->V = newPoints[2];
+}
+
+void Cone::scale(float sBase, float sAltura) {
+	this->H *= sAltura;
+	this->R *= sBase;
+	this->V = this->somaVetores(centro, multiplicaVetorPorEscalar(Hdir, H));
+}
+
+

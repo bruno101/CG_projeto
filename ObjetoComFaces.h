@@ -19,13 +19,16 @@ private:
 	tuple<bool, float> hasIntersectionFace(float p0x, float p0y, float p0z, float dx, float dy, float dz, int numFace);
 	bool estaDentroDaFace(vector<float> pInt, int numFace);
 
+	vector<vector<float>> getListOfPoints();
+	void setListOfPoints(vector<vector<float>> newPoints);
+
 public:
 	vector<vector<float>> vertices;
 	ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> material);
 	ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<vector<float>>> materiaisFaces);
+	void scale(float sx, float sy, float sz);
 
 
 	tuple<bool, float, vector<vector<float>>, vector<float>> hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz);
-	/*void paint();*/
 };
 

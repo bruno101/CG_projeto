@@ -16,5 +16,8 @@ private:
 	vector<ObjetoComFaces*> objetos;
 	bool podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz);
 
+	vector<vector<float>> getListOfPoints();
+	void setListOfPoints(vector<vector<float>> newPoints);
+
 };
 

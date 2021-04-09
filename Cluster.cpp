@@ -87,3 +87,11 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cluster::hasIntersectio
 	return make_tuple(intersecta, t, material, normal);
 
 }
+
+vector<vector<float>> Cluster::getListOfPoints() {
+	return{ { 0,0,0 } };
+}
+
+void Cluster::setListOfPoints(vector<vector<float>> newPoints) {
+
+}

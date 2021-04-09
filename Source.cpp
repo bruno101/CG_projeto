@@ -13,6 +13,14 @@
 
 using namespace std;
 
+vector<float> p0_c = { 0.0, 1.5, 0.0 };
+vector<float> at = { 0.0, 1.5, -2.0 };
+vector<float> up = { 0.0, 2.0, 0.0 };
+
+int Width = 150;
+int Height = 150;
+GLfloat janela[150][150][3];
+
 //FUN합ES COM MATRIZES E VETORES
 
 
@@ -115,10 +123,6 @@ vector<vector<float>> rotationMatrixZ(float az, vector<float> pivot = { 0, 0, 0 
 	return multiplyMatrix(translationFromOriginMatrix(pivot), multiplyMatrix(M, translationToOriginMatrix(pivot)));
 }
 
-vector<vector<float>> rotationMatrix(float ax, float ay, float az, vector<float> pivot = { 0,0,0 }) {
-	vector<vector<float>> M = multiplyMatrix(multiplyMatrix(rotationMatrixX(ax, pivot), rotationMatrixY(ay, pivot)), rotationMatrixZ(az, pivot));
-	return M;
-}
 
 vector<vector<float>> cisalhamento() {
 	vector<vector<float>> M(4, vector<float>(4, 0));
@@ -332,438 +336,14 @@ void specialKeys(int key, int x, int y)
 	glutPostRedisplay();
 }
 
-void displayOld()
+vector<vector<float>> intensidadeLuzDistante = { { 0.1f, 0.1f, 0.1f },{ 0.9f, 0.9f, 0.9f },{ 0.9f, 0.9f, 0.9f } };
+vector<vector<float>> intensidadeLuzPontual = { { 0.0f, 0.0f, 0.0f },{ 0.9f, 0.9f, 0.9f },{ 0.9f, 0.9f, 0.9f } }; float a = 1.0; float b = 0.005; float c = 0.001;
+
+tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float> dLuzDistanteR, vector<float> pLuzPontual, float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
 
-	glClearColor(0.529, 0.808, 0.922, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	/*int w = glutGet(GLUT_WINDOW_WIDTH);
-	int h = glutGet(GLUT_WINDOW_HEIGHT);
-	gluPerspective(60, w / h, 0.1, 100);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt
-	(
-		0, 0.3, 11,
-		0, 0, 0,
-		0, 1, 0
-	);*/
-
-	int w = glutGet(GLUT_WINDOW_WIDTH);
-	int h = glutGet(GLUT_WINDOW_HEIGHT);
-	glOrtho(-8, 8, 0, 16, -10, 100);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt
-	(
-		0, 2, 50,
-		0, 0, 20,
-		0, 1, 0
-	);
-	glViewport(0, 0, w, h);
-
-	glRotatef(rotate_x, 1.0, 0.0, 0.0);
-	glRotatef(rotate_y, 0.0, 1.0, 0.0);
-	//colorBox();
-	//colorPyramid();
-	//colorSphere();
-
-	glBegin(GL_QUADS);
-	glColor3f(0.0, 154.0 / 256.0, 23.0 / 256.0);
-	glVertex3f(-100.0, 0.0, 0.0);
-	glVertex3f(100.0, 0.0, 0.0);
-	glVertex3f(100.0, 0.0, -100.0);
-	glVertex3f(-100.0, 0.0, -100.0);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3f(0.0, 0.412, 0.58);
-	glVertex3f(-100.0, 0.0, 100.0);
-	glVertex3f(100.0, 0.0, 100.0);
-	glVertex3f(100.0, 0.0, 0.0);
-	glVertex3f(-100.0, 0.0, 0.0);
-	glEnd();
-	
-	vector<vector<float>> topoArvore = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-0.25, 1.0, -0.25), scaleMatrix(0.6, 0.8, 0.6)));
-	/*vector<vector<float>> p1 = multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -3.0));
-	vector<vector<float>> p2 = multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.0, -3.0));
-	vector<vector<float>> p3 = multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.0, -3.0));
-	vector<vector<float>> p4 = multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -5.0));
-	vector<vector<float>> p5 = multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.0, -5.0));*/
-	GLfloat pineGreen[3] = { 0.004, 0.475, 0.318 };
-	/*colorTriangularPyramid(p1, pineGreen);
-	colorTriangularPyramid(p2, pineGreen);
-	colorTriangularPyramid(p3, pineGreen);
-	colorTriangularPyramid(p4, pineGreen);
-	colorTriangularPyramid(p5, pineGreen);*/
-
-	vector<vector<float>> troncoArvore = multiplyByMatrix(8, basicCube, scaleMatrix(0.1, 1.0, 0.1));
-	/*vector<vector<float>> b1 = multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0,-3.0));
-	vector<vector<float>> b2 = multiplyByMatrix(8, troncoArvore, translationMatrix(-1.0, 0.0, -3.0));
-	vector<vector<float>> b3 = multiplyByMatrix(8, troncoArvore, translationMatrix(1.0, 0.0, -3.0));
-	vector<vector<float>> b4 = multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -5.0));
-	vector<vector<float>> b5 = multiplyByMatrix(8, troncoArvore, translationMatrix(0.0, 0.0, -5.0));*/
-	GLfloat treeBrown[3] = { 119.0 / 256.0, 69.0 / 256.0, 19.0 / 256.0 };
-	/*colorBox(b1, treeBrown);
-	colorBox(b2, treeBrown);
-	colorBox(b3, treeBrown);
-	colorBox(b4, treeBrown);
-	colorBox(b5, treeBrown);*/
-
-	/*void colorBox(vector<vector<float>> box, GLfloat color[3]) {
-		quad(box, 4, 0, 1, 5, color);
-		quad(box, 5, 1, 2, 6, color);
-		quad(box, 6, 2, 3, 7, color);
-		quad(box, 7, 3, 0, 4, color);
-		quad(box, 5, 6, 7, 4, color);
-		quad(box, 1, 0, 3, 2, color);
-	}*/
-
-	/*void colorTriangularPyramid(vector<vector<float>> triangularPyramid, GLfloat color[3]) {
-		triangle(triangularPyramid, 1, 2, 3, color);
-		triangle(triangularPyramid, 2, 0, 3, color);
-		triangle(triangularPyramid, 0, 1, 3, color);
-		triangle(triangularPyramid, 0, 2, 1, color);
-	}*/
-
-	/*ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {4,0,1,5}, {5,1,2,6}, {6,2,3,7}, {7,3,0,4}, {5,6,7,4}, {1,0,3,2} }, treeBrown);
-	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0)), { {1,2,3}, {2,0,3}, {0,1,3}, {0,2,1} }, pineGreen);
-	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0)), { { 1,2,3 },{ 2,0,3 },{ 0,1,3 },{ 0,2,1 } }, pineGreen);
-
-	vector<Objeto*> objetos = { &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 };
-
-	vector<vector<GLfloat>> janela[3] = { { {0.0,0.0,0.0},{ 0.0,0.0,0.0 } }, { {0.0,0.0,0.0},{ 0.0,0.0,0.0 } },
-};*/
-	/*lancarRaios(janela, objetos, 2, 2, -1, 1, 0, 2, 0, 0, 0, -1);
-
-	for (int i = 0; i < size(objetos); i++) {
-		(*objetos[i]).paint();
-	}*/
-
-
-
-
-	//vector<vector<float>> a1Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-6.0, 0.0, -7.0));
-	//vector<vector<float>> a1Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.0, -7.0));
-	//vector<vector<float>> a1Folhas2 = multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.2, -7.0));
-	//vector<vector<float>> a1Folhas3 = multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.4, -7.0));
-	//vector<vector<float>> a1Folhas4 = multiplyByMatrix(4, topoArvore, translationMatrix(-6.0, 0.6, -7.0));
-	//colorBox(a1Tronco, treeBrown);
-	//colorTriangularPyramid(a1Folhas1, pineGreen);
-	//colorTriangularPyramid(a1Folhas2, pineGreen);
-	//colorTriangularPyramid(a1Folhas3, pineGreen);
-	//colorTriangularPyramid(a1Folhas4, pineGreen);
-
-	vector<vector<float>> a2Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-5.0, 0.0, -7.0));
-	vector<vector<float>> a2Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.0, -7.0));
-	vector<vector<float>> a2Folhas2 = multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.2, -7.0));
-	vector<vector<float>> a2Folhas3 = multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.4, -7.0));
-	vector<vector<float>> a2Folhas4 = multiplyByMatrix(4, topoArvore, translationMatrix(-5.0, 0.6, -7.0));
-	colorBox(a2Tronco, treeBrown);
-	colorTriangularPyramid(a2Folhas1, pineGreen);
-	colorTriangularPyramid(a2Folhas2, pineGreen);
-	colorTriangularPyramid(a2Folhas3, pineGreen);
-	colorTriangularPyramid(a2Folhas4, pineGreen);
-
-	vector<vector<float>> a3Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-4.0, 0.0, -7.0));
-	vector<vector<float>> a3Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.0, -7.0));
-	vector<vector<float>> a3Folhas2 = multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.2, -7.0));
-	vector<vector<float>> a3Folhas3 = multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.4, -7.0));
-	vector<vector<float>> a3Folhas4 = multiplyByMatrix(4, topoArvore, translationMatrix(-4.0, 0.6, -7.0));
-	colorBox(a3Tronco, treeBrown);
-	colorTriangularPyramid(a3Folhas1, pineGreen);
-	colorTriangularPyramid(a3Folhas2, pineGreen);
-	colorTriangularPyramid(a3Folhas3, pineGreen);
-	colorTriangularPyramid(a3Folhas4, pineGreen);
-
-	vector<vector<float>> a4Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0));
-	vector<vector<float>> a4Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0));
-	vector<vector<float>> a4Folhas2 = multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0));
-	vector<vector<float>> a4Folhas3 = multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0));
-	vector<vector<float>> a4Folhas4 = multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0));
-	colorBox(a4Tronco, treeBrown);
-	colorTriangularPyramid(a4Folhas1, pineGreen);
-	colorTriangularPyramid(a4Folhas2, pineGreen);
-	colorTriangularPyramid(a4Folhas3, pineGreen);
-	colorTriangularPyramid(a4Folhas4, pineGreen);
-
-	vector<vector<float>> a5Tronco = multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -7.0));
-	vector<vector<float>> a5Folhas1 = multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0));
-	vector<vector<float>> a5Folhas2 = multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0));
-	vector<vector<float>> a5Folhas3 = multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0));
-	vector<vector<float>> a5Folhas4 = multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0));
-	colorBox(a5Tronco, treeBrown);
-	colorTriangularPyramid(a5Folhas1, pineGreen);
-	colorTriangularPyramid(a5Folhas2, pineGreen);
-	colorTriangularPyramid(a5Folhas3, pineGreen);
-	colorTriangularPyramid(a5Folhas4, pineGreen);
-
-
-	vector<vector<float>> montanha1 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-15.0, 0.0, -80.0), scaleMatrix(20.0, 10.0, 5.0)));
-	GLfloat mountainBlue[3] = { 0.6314, 0.2392, 0.1765 };
-	colorTriangularPyramid(montanha1, mountainBlue);
-	vector<vector<float>> montanha2 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(0.0, 0.0, -85.0), scaleMatrix(19.0, 12.0, 7.0)));
-	colorTriangularPyramid(montanha2, mountainBlue);
-	vector<vector<float>> montanha3 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(14.0, 0.0, -82.0), scaleMatrix(24.0, 10.0, 7.0)));
-	colorTriangularPyramid(montanha3, mountainBlue);
-	vector<vector<float>> montanha4 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(32.0, 0.0, -81.0), scaleMatrix(19.0, 11.0, 12.0)));
-	colorTriangularPyramid(montanha4, mountainBlue);
-	vector<vector<float>> montanha5 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(40.0, 0.0, -70.0), scaleMatrix(28.0, 9.0, 15.0)));
-	colorTriangularPyramid(montanha5, mountainBlue);
-	vector<vector<float>> montanha6 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(49.0, 0.0, -50.0), scaleMatrix(33.0, 10.0, 18.0)));
-	colorTriangularPyramid(montanha6, mountainBlue);
-	vector<vector<float>> montanha7 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(67.0, 0.0, -35.0), scaleMatrix(29.0, 10.0, 17.0)));
-	colorTriangularPyramid(montanha7, mountainBlue);
-	vector<vector<float>> montanha8 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(80.0, 0.0, -20.0), scaleMatrix(24.0, 10.0, 20.0)));
-	colorTriangularPyramid(montanha8, mountainBlue);
-	vector<vector<float>> montanha9 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-27.0, 0.0, -70.0), scaleMatrix(17.0, 11.0, 10.0)));
-	colorTriangularPyramid(montanha9, mountainBlue);
-	vector<vector<float>> montanha10 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-40.0, 0.0, -65.0), scaleMatrix(24.0, 9.0, 8.0)));
-	colorTriangularPyramid(montanha10, mountainBlue);
-	vector<vector<float>> montanha11 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-53.0, 0.0, -55.0), scaleMatrix(22.0, 8.0, 14.0)));
-	colorTriangularPyramid(montanha11, mountainBlue);
-	vector<vector<float>> montanha12 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-67.0, 0.0, -50.0), scaleMatrix(21.0, 7.0, 13.0)));
-	colorTriangularPyramid(montanha12, mountainBlue);
-	vector<vector<float>> montanha13 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-80.0, 0.0, -42.0), scaleMatrix(23.0, 8.0, 15.0)));
-	colorTriangularPyramid(montanha13, mountainBlue);
-	vector<vector<float>> montanha14 = multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(-95.0, 0.0, -35.0), scaleMatrix(23.0, 8.0, 18.0)));
-	colorTriangularPyramid(montanha14, mountainBlue);
-
-	vector<vector<float>> ship1 = multiplyByMatrix(8, ship, multiplyMatrix(translationMatrix(2.5, 0.0, 2.0), scaleMatrix(1.5, 0.5, 0.5)));
-	GLfloat darkBlue[3] = { 0.0, 0.0, 128.0 / 256.0 };
-	colorBox(ship1, darkBlue);
-	vector<vector<float>> ship1pole1 = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(3.7, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04)));
-	GLfloat greenBrown[3] = { 74.0 / 256.0, 67.0 / 256.0, 0.0 };
-	colorBox(ship1pole1, greenBrown);
-	vector<vector<float>> ship1pole2 = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(3.5, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04)));
-	colorBox(ship1pole2, greenBrown);
-	vector<vector<float>> ship1pole3 = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(3.3, 0.5, 2.24), scaleMatrix(0.02, 0.8, 0.02)));
-	colorBox(ship1pole3, greenBrown);
-	glBegin(GL_TRIANGLES);
-	GLfloat red[3] = { 0.659, 0.0, 0.0 };
-	glColor3fv(red);
-	glVertex3f(2.3, 0.6, 2.25);
-	glVertex3f(3.3, 0.6, 2.25);
-	glVertex3f(3.3, 1.3, 2.25);
-	glEnd();
-
-	vector<vector<float>> baseTorre = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.0, 0.0, -7.2), scaleMatrix(0.8, 5.0, 0.8)));
-	GLfloat lightYellow[3] = { 255.0 / 256.0, 255.0 / 256.0, 153.0 / 256.0 };
-	colorBox(baseTorre, lightYellow);
-
-	GLfloat white[3] = { 256.0, 256.0, 256.0 };
-
-	vector<vector<float>> topoTorre = multiplyByMatrix(5, basicSquarePyramid, multiplyMatrix(translationMatrix(2.05, 5.0, -7.15), scaleMatrix(0.7, 1.7, 0.7)));
-	GLfloat crimson[3] = { 220.0 / 256.0, 20.0 / 256.0, 60.0 / 256.0 };
-	colorSquarePyramid(topoTorre, crimson);
-
-	vector<vector<float>> cruzParteVertical = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.385, 6.7, -6.815), scaleMatrix(0.03, 1.0, 0.03)));
-	GLfloat brown[3] = { 210.0 / 256.0, 105.0 / 256.0, 30.0 / 256.0 };
-	colorBox(cruzParteVertical, brown);
-
-	vector<vector<float>> cruzParteHorizontal = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.15, 7.3, -6.95), scaleMatrix(0.5, 0.03, 0.03)));
-	colorBox(cruzParteHorizontal, brown);
-
-	vector<vector<float>> baseIgreja = multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(2.0, 0.0, -10.2), scaleMatrix(2.0, 2.5, 3.0)));
-	colorBox(baseIgreja, lightYellow);
-
-	vector<vector<float>> topoIgreja = multiplyByMatrix(6, roof, multiplyMatrix(translationMatrix(2.0, 2.5, -10.2), scaleMatrix(2.0, 2.5, 3.0)));;
-	colorRoof(topoIgreja, lightYellow, crimson);
-
-	//desenhando porta da igreja
-
-	glBegin(GL_QUADS);
-	glColor3fv(brown);
-	glVertex3f(3.0, 0.0, -7.19);
-	glVertex3f(3.5, 0.0, -7.19);
-	glVertex3f(3.5, 0.6, -7.19);
-	glVertex3f(3.0, 0.6, -7.19);
-	glEnd();
-
-	float radius = 0.25;
-	float pi = 3.1415926535;
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3fv(brown);
-	for (float i = 0; i <= pi * 2; i += 0.001) {
-		glVertex3f(sin(i)*radius + 3.25, cos(i)*radius + 0.6, -7.19);
-	}
-	glEnd();
-
-	GLfloat blue[3] = { 135.0 / 256.0,206.0 / 256.0,255.0 / 256.0 };
-
-	/*radius = 0.25;
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3fv(darkBlue);
-	for (float i = 0; i <= pi * 2; i += 0.001) {
-		glVertex3f(sin(i)*radius + 3.25, cos(i)*radius*1.2 + 2.2, -7.19);
-	}
-	glEnd();
-
-	GLfloat green[3] = { 40.0 / 256.0, 180.0 / 256.0, 99.0 / 256.0 };
-
-	radius = 0.2;
-	glBegin(GL_TRIANGLE_FAN);
-	glColor3fv(green);
-	for (float i = 0; i <= pi * 2; i += 0.001) {
-		glVertex3f(sin(i)*radius + 3.25, cos(i)*radius*1.2 + 2.2, -7.18);
-	}
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(white);
-	glVertex3f(3.25, 2.2, -7.17);
-	glVertex3f(3.265, 2.2, -7.17);
-	glVertex3f(3.265, 2.3, -7.17);
-	glVertex3f(3.25, 2.3, -7.17);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(white);
-	glVertex3f(3.25, 2.215, -7.17);
-	glVertex3f(3.4, 2.215, -7.17);
-	glVertex3f(3.4, 2.185, -7.17);
-	glVertex3f(3.25, 2.185, -7.17);
-	glEnd();*/
-
-	//desenhando parte da frente do telhado
-
-	glBegin(GL_QUADS);
-	glColor3fv(crimson);
-	glVertex3f(4.0, 2.5, -7.19);
-	glVertex3f(3.0, 5.0, -7.19);
-	glVertex3f(2.9, 5.0, -7.19);
-	glVertex3f(3.9, 2.5, -7.19);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(crimson);
-	glVertex3f(3.0, 5.0, -7.19);
-	glVertex3f(2.5, 3.75, -7.19);
-	glVertex3f(2.4, 3.75, -7.19);
-	glVertex3f(2.9, 5.0, -7.19);
-	glEnd();
-
-	//desenhando janelas
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(2.6, 3.6, -6.39);
-	glVertex3f(2.6, 4.4, -6.39);
-	glVertex3f(2.2, 4.4, -6.39);
-	glVertex3f(2.2, 3.6, -6.39);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(1.99, 3.6, -6.6);
-	glVertex3f(1.99, 4.4, -6.6);
-	glVertex3f(1.99, 4.4, -7.0);
-	glVertex3f(1.99, 3.6, -7.0);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(2.81, 3.6, -6.6);
-	glVertex3f(2.81, 4.4, -6.6);
-	glVertex3f(2.81, 4.4, -7.0);
-	glVertex3f(2.81, 3.6, -7.0);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(2.6, 1.2, -6.39);
-	glVertex3f(2.6, 2.0, -6.39);
-	glVertex3f(2.2, 2.0, -6.39);
-	glVertex3f(2.2, 1.2, -6.39);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(1.99, 1.2, -6.6);
-	glVertex3f(1.99, 2.0, -6.6);
-	glVertex3f(1.99, 2.0, -7.0);
-	glVertex3f(1.99, 1.2, -7.0);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(2.81, 1.2, -6.6);
-	glVertex3f(2.81, 2.0, -6.6);
-	glVertex3f(2.81, 2.0, -7.0);
-	glVertex3f(2.81, 1.2, -7.0);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(1.99, 1.2, -7.4);
-	glVertex3f(1.99, 2.0, -7.4);
-	glVertex3f(1.99, 2.0, -7.8);
-	glVertex3f(1.99, 1.2, -7.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(1.99, 1.2, -8.4);
-	glVertex3f(1.99, 2.0, -8.4);
-	glVertex3f(1.99, 2.0, -8.8);
-	glVertex3f(1.99, 1.2, -8.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(1.99, 1.2, -9.4);
-	glVertex3f(1.99, 2.0, -9.4);
-	glVertex3f(1.99, 2.0, -9.8);
-	glVertex3f(1.99, 1.2, -9.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(4.01, 1.2, -7.4);
-	glVertex3f(4.01, 2.0, -7.4);
-	glVertex3f(4.01, 2.0, -7.8);
-	glVertex3f(4.01, 1.2, -7.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(4.01, 1.2, -8.4);
-	glVertex3f(4.01, 2.0, -8.4);
-	glVertex3f(4.01, 2.0, -8.8);
-	glVertex3f(4.01, 1.2, -8.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(4.01, 1.2, -9.4);
-	glVertex3f(4.01, 2.0, -9.4);
-	glVertex3f(4.01, 2.0, -9.8);
-	glVertex3f(4.01, 1.2, -9.8);
-	glEnd();
-
-	glBegin(GL_QUADS);
-	glColor3fv(blue);
-	glVertex3f(3.6, 1.2, -7.19);
-	glVertex3f(3.6, 2.0, -7.19);
-	glVertex3f(3.2, 2.0, -7.19);
-	glVertex3f(3.2, 1.2, -7.19);
-	glEnd();
-
-	glutSwapBuffers();
-
-}
-
-tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> luz, float p0x, float p0y, float p0z, float dx, float dy, float dz)
-{
-
-	vector<float> direcaoLuz = { -1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
-	vector<float> direcaoLuzR = { 1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
+	vector<float> direcaoLuz = dLuzDistante;
+	vector<float> direcaoLuzR = dLuzDistanteR;
 
 	GLfloat R;
 	GLfloat G;
@@ -796,50 +376,70 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 		if (fatorAnguloR < 0) {
 			fatorAnguloR = 0;
 		}
-		R = material[0][0]*luz[0][0] + material[1][0] * luz[1][0] * fatorAnguloD + material[2][0] * luz[2][0] * fatorAnguloR;
-		G = material[0][1]*luz[0][1] + material[1][1] * luz[1][1] * fatorAnguloD + material[2][1] * luz[2][1] * fatorAnguloR;
-		B = material[0][2]*luz[0][2] + material[1][2] * luz[1][2] * fatorAnguloD + material[2][2] * luz[2][2] * fatorAnguloR;
-	}
-	else if (dy < 0.0) {
-		float zIntChao = p0z + dz*(-p0y / dy);
-		if (zIntChao > 0) {
-			//MAR
-			float fatorAnguloR = pow(cos(direcaoLuzR[0] * (-dx) - direcaoLuzR[1] * (-dy) - direcaoLuzR[2] * (-dz)), 4);
-			if (fatorAnguloR < 0) {
-				fatorAnguloR = 0;
-			}
-			R = 0.0;
-			G = 0.412*0.1+0.412*0.9*fatorAnguloR;
-			B = 0.58*0.1+0.58*0.9*fatorAnguloR;
+		R = material[0][0]*intensidadeLuzDistante[0][0] + material[1][0] * intensidadeLuzDistante[1][0] * fatorAnguloD + material[2][0] * intensidadeLuzDistante[2][0] * fatorAnguloR;
+		G = material[0][1]*intensidadeLuzDistante[0][1] + material[1][1] * intensidadeLuzDistante[1][1] * fatorAnguloD + material[2][1] * intensidadeLuzDistante[2][1] * fatorAnguloR;
+		B = material[0][2]*intensidadeLuzDistante[0][2] + material[1][2] * intensidadeLuzDistante[1][2] * fatorAnguloD + material[2][2] * intensidadeLuzDistante[2][2] * fatorAnguloR;
+
+		/*vector<float> direcaoLuz2 = Objeto::normalizaVetor(Objeto::diferencaVetores(pLuzPontual, { p0x + dx*t, p0y + dy*t, p0z + dz*t }));
+		vector<float> fatorAnguloR;
+		float fatorAnguloD2 = abs(cos(normal[0] * direcaoLuz2[0] + normal[1] * direcaoLuz2[1] + normal[2] * direcaoLuz2[2]));
+		float fatorAnguloR2 = pow(cos(direcaoLuzR2[0] * (-dx) - direcaoLuzR2[1] * (-dy) - direcaoLuzR2[2] * (-dz)), 4);
+		if (fatorAnguloR2 < 0) {
+			fatorAnguloR2 = 0;
 		}
-		else {
-			//GRAMA
-			R = 0.0;
-			G = 154.0*0.9 / 256.0;
-			B = 23.0*0.9 / 256.0;
-		}
+		float sqrtD = Objeto::normaVetor(Objeto::diferencaVetores(pLuzPontual, { p0x + dx*t, p0y + dy*t, p0z + dz*t }));
+		float d = sqrtD*sqrtD;
+		float fatorD = 1.0 / (a + b*d + c*d*d);
+
+
+		R += material[0][0]*intensidadeLuzPontual[0][0] * fatorD + material[1][0] * intensidadeLuzPontual[1][0] * fatorD + material[2][0] * intensidadeLuzPontual[2][0] * fatorD;
+		G += material[0][1]*intensidadeLuzPontual[0][1] * fatorD + material[1][1] * intensidadeLuzPontual[1][1] * fatorD + material[2][1] * intensidadeLuzPontual[2][1] * fatorD;
+		B += material[0][2]*intensidadeLuzPontual[0][2] * fatorD + material[1][2] * intensidadeLuzPontual[1][2] * fatorD + material[2][2] * intensidadeLuzPontual[2][2] * fatorD;
+	*/
 	}
 	else {
-		//CEU
-		R = 0.529;
-		G = 0.808;
-		B = 0.922;
+		vector<float> p0_W = multiplyVectorByMatrix({ p0x, p0y, p0z }, M_CW);
+		vector<float> d_W = multiplyVectorByMatrix({ p0x + dx, p0y + dy, p0z + dz }, M_CW);
+		p0x = p0_W[0]; p0y = p0_W[1]; p0z = p0_W[2];
+		dx = d_W[0]-p0x; dy = d_W[1]-p0y; dz = d_W[2]-p0z;
+		if (dy <= 0) {
+			float zIntChao = p0z + dz*(-p0y / dy);
+			//cout << dx << " " << dy << " " << dz << " " << p0x << " " << p0y << " " << p0z << " " << zIntChao << "\n";
+			if (zIntChao > 0) {
+				//MAR
+				float fatorAnguloR = pow(cos(direcaoLuzR[0] * (-dx) - direcaoLuzR[1] * (-dy) - direcaoLuzR[2] * (-dz)), 4);
+				if (fatorAnguloR < 0) {
+					fatorAnguloR = 0;
+				}
+				R = 0.0;
+				G = 0.412*0.1 + 0.412*0.9*fatorAnguloR;
+				B = 0.58*0.1 + 0.58*0.9*fatorAnguloR;
+			}
+			else {
+				//GRAMA
+				R = 0.0;
+				G = 154.0*0.9 / 256.0;
+				B = 23.0*0.9 / 256.0;
+			}
+		}
+		else {
+			//CEU
+			R = 0.529;
+			G = 0.808;
+			B = 0.922;
+		}
 	}
 
 	return make_tuple(R, G, B);
 
 }
 
-int Width = 150;
-int Height = 150;
-GLfloat janela[150][150][3];
-
-void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> luz, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
+void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float> dLuzDistanteR, vector<float>pLuzPontual, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
 {
 
 	float R, G, B;
 
-	float d0x, d0y, d0z, tam;
+	float d0x, d0y, d0z, tam, max = 0.0;
 
 	for (int i = 0; i < Height; i++) {
 		for (int j = 0; j < Width; j++) {
@@ -847,11 +447,28 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> luz, float left,
 			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
 			d0z = (zLeft + (zRight - zLeft)*(0.5 + j) / Width) - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
-			auto tup = corPixel(objetos, luz, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
+			auto tup = corPixel(objetos, M_CW, dLuzDistante, dLuzDistanteR, pLuzPontual, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
 			janela[i][j][1] = G;
 			janela[i][j][2] = B;
+			if (R > max) {
+				max = R;
+			}
+			if (G > max) {
+				max = G;
+			}
+			if (B > max) {
+				max = B;
+			}
+		}
+	}
+
+	for (int i = 0; i < Height; i++) {
+		for (int j = 0; j < Width; j++) {
+			janela[i][j][0] /= max;
+			janela[i][j][1] /= max;
+			janela[i][j][2] /= max;
 		}
 	}
 
@@ -872,7 +489,7 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> luz, float left,
 void display()
 {
 
-	//definindo cores usadas
+	//definindo materiais usados
 	
 	vector<vector<float>> pineGreen = { { 0.004f, 0.475f, 0.318f },{ 0.004f, 0.475f, 0.318f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> lightYellow = { {255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f},{ 255.0f / 255.0f, 255.0f / 255.0f, 153.0f / 255.0f }, {0.0f, 0.0f, 0.0f} };
@@ -904,35 +521,30 @@ void display()
 	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
-	Cluster arvore1 = Cluster({ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 });
 
 	ObjetoComFaces a2Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-2.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
-	Cluster arvore2 = Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
 
 	ObjetoComFaces a3Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-1.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a3Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a3Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a3Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a3Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
-	Cluster arvore3 = Cluster({ &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4 });
 
 	ObjetoComFaces a4Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(0.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a4Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a4Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a4Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a4Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
-	Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
 
 	ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(1.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
-	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });
 
 	//desenhando igreja
 
@@ -958,18 +570,12 @@ void display()
 	ObjetoComFaces janelaIgrejaEsquerdaTras = ObjetoComFaces({ { 1.99f, 1.2f, -9.4f },{ 1.99f, 2.0f, -9.4f },{ 1.99f, 2.0f, -9.8f },{ 1.99f, 1.2f, -9.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
 	ObjetoComFaces janelaIgrejaFrente = ObjetoComFaces({ { 3.6f, 1.2f, -7.19f },{ 3.6f, 2.0f, -7.19f },{ 3.2f, 2.0f, -7.19f },{ 3.2f, 1.2f, -7.19f } }, { { 0, 1, 2, 3 } }, blueGlass);
 
-	Cluster topoTorreCluster = Cluster({ &topoTorre, &cruzParteVertical, &cruzParteHorizontal });
-	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente });
-
 	//desenhando navio
 	ObjetoComFaces ship1 = ObjetoComFaces(multiplyByMatrix(8, ship, multiplyMatrix(translationMatrix(-2.5, 0.0, 2.0), scaleMatrix(1.5, 0.5, 0.5))), boxFaces, darkBlue);
 	ObjetoComFaces ship1pole1 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.3, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04))), boxFaces, greenBrown);
 	ObjetoComFaces ship1pole2 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.5, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04))), boxFaces, greenBrown);
 	ObjetoComFaces ship1pole3 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.7, 0.5, 2.24), scaleMatrix(0.02, 0.8, 0.02))), boxFaces, greenBrown);
 	ObjetoComFaces flag = ObjetoComFaces({ {-2.7f,0.6f,2.25f}, {-1.7f,0.6f,2.25f}, {-1.7f,1.3f,2.25f} }, { {0,1,2} }, red);
-
-	Cluster navio = Cluster({&ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag});
-	
 
 	/* I - UM OBJETO DE UMA FACE
 	ObjetoComFaces objeto2d = ObjetoComFaces({ { 4.0f, 2.5f, -7.19f },{ 3.0f, 5.0f, -7.19f },{ 2.9f, 5.0f, -7.19f },{ 3.9f, 2.5f, -7.19f } }, { { 0, 1, 2, 3 } }, treeBrown);
@@ -993,16 +599,87 @@ void display()
 	ObjetoComFaces montanha3 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(32.0, 0.0, -81.0), scaleMatrix(19.0, 11.0, 12.0))), triangularPyramidFaces, mountainBlue);
 	ObjetoComFaces montanha4 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(14.0, 0.0, -82.0), scaleMatrix(24.0, 10.0, 7.0))), triangularPyramidFaces, mountainBlue);
 
-	//Cilindro topoCilindroArvore = Cilindro({ 0.0,2.0,-10.0 }, { 0.0, 0.0, -1.0 }, 5.0, 1.0, pineGreen);
-	Cone topoConeArvore = Cone({ 0.0,1.0,-10.0 }, { 0.0, 1.0, 0.0 }, 5.0, 1.0, pineGreen);
+	Cilindro topoCilindroArvore = Cilindro({ -4.0,0.0,-10.0 }, { 0.0, 1.0, 0.0 }, 2.0, 1.0, pineGreen);
+	Cone topoConeArvore = Cone({ 0.0,3.0,-6.0 }, { 0.0, 1.0, 0.0 }, 1.0, 0.5, pineGreen);
 
-	vector<Objeto*> objetos = { &topoConeArvore, /*&igreja , &arvore1, &arvore2, &arvore3, &arvore4, &arvore5, &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
+	Esfera esfera1 = Esfera({ -1.0, 2.0, -7.0 }, 1.0, pineGreen);
 
-	//luz ambiente, difusa e especular
-	vector<vector<float>> luz = { {0.1f, 0.1f, 0.1f}, {0.9f, 0.9f, 0.9f}, {0.9f, 0.9f, 0.9f} };
+	vector<Objeto*> listaTodosObjetos = { &topoCilindroArvore, &topoConeArvore, &esfera1, &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4, &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4, &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente };
 
-	lancarRaios(objetos, luz, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
+	//APLICA플O DE MAIS TRANSFORMA합ES
+	
+	topoCilindroArvore.scale(2, 5);
+	//topoCilindroArvore.rotateZ(60, { 0,0,0 });
+	a3Tronco.rotateZ(10, a3Tronco.centro);
+	a3Folhas1.rotateZ(10, a3Tronco.centro);
+	a3Folhas2.rotateZ(10, a3Tronco.centro);
+	a3Folhas3.rotateZ(10, a3Tronco.centro);
+	a3Folhas4.rotateZ(10, a3Tronco.centro);
 
+	vector<float> vUp = Objeto::normalizaVetor(Objeto::diferencaVetores(up, p0_c));
+
+	vector<float> k_c = Objeto::normalizaVetor(Objeto::diferencaVetores(p0_c, at));
+	vector<float> i_c = Objeto::normalizaVetor(Objeto::produtoVetorial(vUp, k_c));
+	vector<float> j_c = Objeto::produtoVetorial(k_c, i_c);
+
+	vector<vector<float>> M_CW(4, vector<float>(4));
+	M_CW[0][0] = i_c[0];
+	M_CW[0][1] = j_c[0];
+	M_CW[0][2] = k_c[0];
+	M_CW[0][3] = p0_c[0];
+	M_CW[1][0] = i_c[1];
+	M_CW[1][1] = j_c[1];
+	M_CW[1][2] = k_c[1];
+	M_CW[1][3] = p0_c[1];
+	M_CW[2][0] = i_c[2];
+	M_CW[2][1] = j_c[2];
+	M_CW[2][2] = k_c[2];
+	M_CW[2][3] = p0_c[2];
+	M_CW[3][3] = 1;
+
+
+	vector<vector<float>> M_WC(4, vector<float>(4));
+
+	M_WC[0][0] = i_c[0];
+	M_WC[0][1] = i_c[1];
+	M_WC[0][2] = i_c[2];
+	M_WC[1][0] = j_c[0];
+	M_WC[1][1] = j_c[1];
+	M_WC[1][2] = j_c[2];
+	M_WC[2][0] = k_c[0];
+	M_WC[2][1] = k_c[1];
+	M_WC[2][2] = k_c[2];
+	M_WC[0][3] = -(i_c[0] * p0_c[0] + i_c[1] * p0_c[1] + i_c[2] * p0_c[2]);
+	M_WC[1][3] = -(j_c[0] * p0_c[0] + j_c[1] * p0_c[1] + j_c[2] * p0_c[2]);
+	M_WC[2][3] = -(k_c[0] * p0_c[0] + k_c[1] * p0_c[1] + k_c[2] * p0_c[2]);
+	M_WC[3][3] = 1;
+
+	for (int i = 0; i < size(listaTodosObjetos); i++) {
+		(*listaTodosObjetos[i]).transform(M_WC);
+	}
+
+	vector<float> direcaoLuz = { -1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
+	vector<float> direcaoLuzR = { 1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
+
+	direcaoLuz = multiplyVectorByMatrix(direcaoLuz, M_WC);
+	direcaoLuzR = multiplyVectorByMatrix(direcaoLuzR, M_WC);
+
+	//DEFINI플O DOS CLUSTERS
+
+	Cluster navio = Cluster({ &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag });
+	Cluster topoTorreCluster = Cluster({ &topoTorre, &cruzParteVertical, &cruzParteHorizontal });
+	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente });
+	Cluster arvore1 = Cluster({ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 });
+	Cluster arvore2= Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
+	Cluster arvore3 = Cluster({ &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4 });
+	Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
+	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });
+
+	vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja  ,&arvore1, &arvore2, &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
+
+	//lancarRaios(objetos, luz, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
+	lancarRaios(objetos, M_CW, direcaoLuz, direcaoLuzR, { 0.0, 2.0, -2.0 }, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -0.5, -0.5);
+	//lancarRaios()
 
 }
 

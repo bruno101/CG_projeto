@@ -238,33 +238,29 @@ tuple<bool, float, vector<vector<float>>, vector<float>> ObjetoComFaces::hasInte
 
 }
 
-/*void ObjetoComFaces::paint() {
+vector<vector<float>> ObjetoComFaces::getListOfPoints() {
+	vector<vector<float>> points = this->vertices;
+	points.push_back(this->centro);
+	return points;
+}
 
-	for (int i = 0; i < size(this->faces); i++) {
-
-		if (size(this->faces[i]) == 3) {
-
-			glBegin(GL_TRIANGLES);
-			glColor3fv(this->color);
-			glVertex3fv(this->vertices[this->faces[i][0]].data());
-			glVertex3fv(this->vertices[this->faces[i][1]].data());
-			glVertex3fv(this->vertices[this->faces[i][2]].data());
-			glEnd();
-
-		}
-
-		if (size(this->faces[i]) == 4) {
-
-			glBegin(GL_QUADS);
-			glColor3fv(this->color);
-			glVertex3fv(this->vertices[this->faces[i][0]].data());
-			glVertex3fv(this->vertices[this->faces[i][1]].data());
-			glVertex3fv(this->vertices[this->faces[i][2]].data());
-			glVertex3fv(this->vertices[this->faces[i][3]].data());
-			glEnd();
-
-		}
-
+void ObjetoComFaces::setListOfPoints(vector<vector<float>> newPoints) {
+	this->centro = newPoints.back();
+	newPoints.pop_back();
+	this->vertices = newPoints;
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		normaisFaces[f] = getNormalFace(f);
 	}
+	this->normaisFaces = normaisFaces;
+}
 
-}*/
+void ObjetoComFaces::scale(float sx, float sy, float sz) {
+	setListOfPoints(multiplyByMatrix(getListOfPoints(), scaleMatrix(sx, sy, sz)));
+	this->raio = this->raio * fmax(sx, fmax(sy, sz));
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		normaisFaces[f] = getNormalFace(f);
+	}
+	this->normaisFaces = normaisFaces;
+}

@@ -138,3 +138,19 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 
 
 }
+
+vector<vector<float>> Cilindro::getListOfPoints() {
+	return { this->centro, this->centroBase2, somaVetores(this->centro, this->Hdir) };
+}
+
+void Cilindro::setListOfPoints(vector<vector<float>> newPoints) {
+	this->centro = newPoints[0];
+	this->centroBase2 = newPoints[1];
+	this->Hdir = diferencaVetores(newPoints[2], this->centro);
+}
+
+void Cilindro::scale(float sBase, float sAltura) {
+	this->H *= sAltura;
+	this->R *= sBase;
+	this->centroBase2 = this->somaVetores(centro, multiplicaVetorPorEscalar(Hdir, H));
+}
