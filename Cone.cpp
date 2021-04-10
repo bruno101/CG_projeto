@@ -99,6 +99,12 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cone::hasIntersection(f
 
 		}
 
+		//Se um valor entre t0 ou t1 for negativo, em teoria ou estamos dentro do objeto, ou nao ha interseção
+		//Estou supondo que nunca estamos dentro do objeto, ou o cenário não carregaria corretamente de qualquer forma devido ao backface culling
+		if (t0 < 0 || t1 < 0) {
+			return make_tuple(false, t0, this->material, normal);
+		}
+
 		if (t0 < t1) {
 			return make_tuple(true, t0, this->material, getNormal({ p0x + dx*t0, p0y + dy*t0, p0z + dz*t0 }));
 		}

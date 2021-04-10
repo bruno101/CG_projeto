@@ -37,12 +37,27 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Esfera::hasIntersection
 	else if (delta == 0) {
 		float t0 = (-B) / (2 * A);
 
+		if (t0 < 0) {
+			t0 = 10000;
+		}
+
 	}
 	else {
 		float tA = (-B + sqrt(delta)) / (2 * A);
 		float tB = (-B - sqrt(delta)) / (2 * A);
 
-		t0 = fmin(tA, tB);
+		if (tA < 0 && tB < 0) {
+			t0 = 10000;
+		}
+		else if (tA < 0) {
+			t0 = tB;
+		}
+		else if (tB < 0){
+			t0 = tA;
+		}
+		else {
+			t0 = fmin(tA, tB);
+		}
 
 	}
 

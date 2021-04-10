@@ -13,9 +13,13 @@
 
 using namespace std;
 
-vector<float> p0_c = { 0.0, 1.5, 0.0 };
+vector<float> p0_c = { 0.0, 1.5, 2.0 };
 vector<float> at = { 0.0, 1.5, -2.0 };
-vector<float> up = { 0.0, 2.0, 0.0 };
+vector<float> up = { 0.0, 2.0, 2.0 };
+
+/*vector<float> p0_c = { 0.0, 1.5, 2.0 };
+vector<float> at = { 0.0, 1.5, 0.0 };
+vector<float> up = { 0.0, 2.0, 2.0 };*/
 
 int Width = 150;
 int Height = 150;
@@ -434,7 +438,7 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 
 }
 
-void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float> dLuzDistanteR, vector<float>pLuzPontual, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float zLeft, float zRight)
+void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float> dLuzDistanteR, vector<float>pLuzPontual, float left, float right, float bottom, float top, float p0x, float p0y, float p0z, float z)
 {
 
 	float R, G, B;
@@ -445,7 +449,7 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<flo
 		for (int j = 0; j < Width; j++) {
 			d0x = (left + (right - left)*(0.5 + j) / Width) - p0x;
 			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
-			d0z = (zLeft + (zRight - zLeft)*(0.5 + j) / Width) - p0z;
+			d0z = z - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
 			auto tup = corPixel(objetos, M_CW, dLuzDistante, dLuzDistanteR, pLuzPontual, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
@@ -678,7 +682,7 @@ void display()
 	vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja  ,&arvore1, &arvore2, &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
 
 	//lancarRaios(objetos, luz, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
-	lancarRaios(objetos, M_CW, direcaoLuz, direcaoLuzR, { 0.0, 2.0, -2.0 }, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -0.5, -0.5);
+	lancarRaios(objetos, M_CW, direcaoLuz, direcaoLuzR, { 0.0, 2.0, -2.0 }, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -0.5);
 	//lancarRaios()
 
 }

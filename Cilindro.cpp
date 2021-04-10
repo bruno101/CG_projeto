@@ -121,6 +121,12 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 
 	}
 
+	//Se um valor entre t0 ou t1 for negativo, em teoria ou estamos dentro do objeto, ou nao ha interseção
+	//Estou supondo que nunca estamos dentro do objeto, ou o cenário não carregaria corretamente de qualquer forma devido ao backface culling
+	if (t0 < 0 || t1 < 0 || t2 < 0) {
+		return make_tuple(false, 10000, this->material, normal);
+	}
+
 	float min = fmin(t0, fmin(t1, t2));
 
 	if (min == 10000) {

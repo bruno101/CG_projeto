@@ -172,7 +172,10 @@ tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, flo
 		float pIntY = p0y + t0*dy;
 		float pIntZ = p0z + t0*dz;
 
-		if (this->estaDentroDaFace( { pIntX, pIntY, pIntZ }, numFace)) {
+		if (t0 < 0) {
+			intersecta = false;
+		}
+		else if (this->estaDentroDaFace( { pIntX, pIntY, pIntZ }, numFace)) {
 			intersecta = true;
 			t = t0;
 		} 
