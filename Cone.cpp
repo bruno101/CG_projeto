@@ -32,7 +32,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cone::hasIntersection(f
 	float B = - 2 * (produtoEscalar(w,dr) - beta*(produtoEscalar(w,Hdir))*(produtoEscalar(dr,Hdir)));
 	float C = produtoEscalar(w,w) - beta*(pow(produtoEscalar(w,Hdir),2));
 
-	float t0;
+	float t0 = 10000;
 
 	float delta = B * B - 4 * A * C;
 	vector<float> normal;

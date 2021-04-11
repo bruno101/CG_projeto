@@ -30,7 +30,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 	float B = 2 * (this->produtoEscalar(w, dr) - (produtoEscalar(w, this->Hdir)) * (produtoEscalar(dr, this->Hdir)));
 	float C = this->produtoEscalar(w,w) - pow(produtoEscalar(w,this->Hdir),2) - pow(this->R,2);
 
-	float t0;
+	float t0 = 10000;
 
 	float delta = B * B - 4 * A * C;
 	vector<float> normal;
@@ -65,7 +65,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 
 	//face 1
 
-	float t1;
+	float t1 = 10000;
 
 	vector<float> v1 = this->diferencaVetores({ p0x, p0y, p0z }, this->centro);
 	vector<float> n1 = multiplicaVetorPorEscalar(this->Hdir, -1.0);
@@ -94,7 +94,7 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 
 	//face 2
 
-	float t2;
+	float t2 = 10000;
 
 	vector<float> v2 = this->diferencaVetores({ p0x, p0y, p0z }, this->centroBase2);
 	vector<float> n2 = this->Hdir;

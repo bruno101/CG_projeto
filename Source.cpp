@@ -13,9 +13,9 @@
 
 using namespace std;
 
-vector<float> p0_c = { 0.0, 1.5, 2.0 };
+vector<float> p0_c = { -2.0, 1.5, 2.0 };
 vector<float> at = { 0.0, 1.5, -2.0 };
-vector<float> up = { 0.0, 2.0, 2.0 };
+vector<float> up = { -2.0, 2.0, 2.0 };
 
 int Width = 150;
 int Height = 150;
@@ -254,10 +254,11 @@ void specialKeys(int key, int x, int y)
 	glutPostRedisplay();
 }
 
+//vector<vector<float>> intensidadeLuzDistante = { {0.0, 0.0, 0.0},{ 0.0, 0.0, 0.0 },{ 0.0, 0.0, 0.0 } };
 vector<vector<float>> intensidadeLuzDistante = { { 0.4f, 0.4f, 0.4f },{ 0.6f, 0.6f, 0.6f },{ 0.6f, 0.6f, 0.6f } };
-vector<vector<float>> intensidadeLuzPontual = { { 0.2f, 0.2f, 0.2f },{ 0.8f, 0.8f, 0.8f },{ 0.8f, 0.8f, 0.8f } }; float a = 1.0; float b = 0.005; float c = 0.001;
+vector<vector<float>> intensidadeLuzPontual = { { 0.3f, 0.3f, 0.3f },{ 0.5f, 0.5f, 0.5f },{ 0.5f, 0.5f, 0.5f } }; float a = 1.0; float b = 0.005; float c = 0.001;
 
-tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> direcaoLuzD, vector<float> pLuzPontual, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> direcaoLuzD, float fatorLuzDCeuGramaMar, vector<float> pLuzPontual, float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
 
 	GLfloat R;
@@ -318,21 +319,21 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 			if (zIntChao > 0) {
 				//MAR
 				R = 0.0;
-				G = 0.412;
-				B = 0.58;
+				G = 0.412*intensidadeLuzDistante[0][1] + 0.412*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+				B = 0.58*intensidadeLuzDistante[0][2] + 0.58*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 			}
 			else {
 				//GRAMA
 				R = 0.0;
-				G = 154.0*0.9 / 256.0;
-				B = 23.0*0.9 / 256.0;
+				G = 0.602*intensidadeLuzDistante[0][1] + 0.602*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+				B = 0.09*intensidadeLuzDistante[0][2] + 0.09*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 			}
 		}
 		else {
 			//CEU
-			R = 0.529;
-			G = 0.808;
-			B = 0.922;
+			R = 0.529*intensidadeLuzDistante[0][0] + 0.529*intensidadeLuzDistante[1][0]*fatorLuzDCeuGramaMar;
+			G = 0.808*intensidadeLuzDistante[0][1] + 0.808*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+			B = 0.922*intensidadeLuzDistante[0][2] + 0.922*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 		}
 	}
 
@@ -347,13 +348,15 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<flo
 
 	float d0x, d0y, d0z, tam, max = 0.0;
 
+	float fatorLuzDCeuGramaMar = Objeto::produtoEscalar(dLuzDistante, { 0.0,1.0,0.0 });
+
 	for (int i = 0; i < Height; i++) {
 		for (int j = 0; j < Width; j++) {
 			d0x = (left + (right - left)*(0.5 + j) / Width) - p0x;
 			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
 			d0z = z - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
-			auto tup = corPixel(objetos, M_CW, dLuzDistante, pLuzPontual, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
+			auto tup = corPixel(objetos, M_CW, dLuzDistante, fatorLuzDCeuGramaMar, pLuzPontual, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
 			janela[i][j][1] = G;
