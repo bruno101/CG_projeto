@@ -27,7 +27,13 @@ public:
 	ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<float>> material);
 	ObjetoComFaces(vector<vector<float>> vertices, vector<vector<int>> faces, vector<vector<vector<float>>> materiaisFaces);
 	void scale(float sx, float sy, float sz);
-
+	void scaleP(float sx, float sy, float sz, vector<float> p);
+	void shearX_XY(float shx);
+	void shearY_XY(float shy);
+	void shearX_XZ(float shx);
+	void shearZ_XZ(float shz);
+	void shearY_YZ(float shy);
+	void shearZ_YZ(float shz);
 
 	tuple<bool, float, vector<vector<float>>, vector<float>> hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz);
 };

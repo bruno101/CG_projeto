@@ -267,3 +267,37 @@ void ObjetoComFaces::scale(float sx, float sy, float sz) {
 	}
 	this->normaisFaces = normaisFaces;
 }
+
+void ObjetoComFaces::scaleP(float sx, float sy, float sz, vector<float> p) {
+	setListOfPoints(multiplyByMatrix(getListOfPoints(), scaleMatrixP(sx, sy, sz, p)));
+	this->raio = this->raio * fmax(sx, fmax(sy, sz));
+	vector<vector<float>> normaisFaces(size(faces), vector<float>(3));
+	for (int f = 0; f < size(faces); f++) {
+		normaisFaces[f] = getNormalFace(f);
+	}
+	this->normaisFaces = normaisFaces;
+}
+
+void ObjetoComFaces::shearX_XY(float shx) {
+
+}
+
+void ObjetoComFaces::shearY_XY(float shy) {
+
+}
+
+void ObjetoComFaces::shearX_XZ(float shx) {
+
+}
+
+void ObjetoComFaces::shearZ_XZ(float shz) {
+
+}
+
+void ObjetoComFaces::shearY_YZ(float shy) {
+
+}
+
+void ObjetoComFaces::shearZ_YZ(float shz) {
+
+}

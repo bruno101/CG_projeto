@@ -16,6 +16,7 @@ public:
 	Esfera(vector<float> centro, float R, vector<vector<float>> material);
 	tuple<bool, float, vector<vector<float>>, vector<float>> hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz);
 	void scale(float s);
+	void scaleP(float s, vector<float> p);
 
 };
 

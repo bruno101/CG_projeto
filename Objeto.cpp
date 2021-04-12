@@ -123,6 +123,18 @@ vector<vector<float>> Objeto::scaleMatrix(float sx, float sy, float sz) {
 	return M;
 }
 
+vector<vector<float>> Objeto::scaleMatrixP(float sx, float sy, float sz, vector<float> p) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = sx;
+	M[1][1] = sy;
+	M[2][2] = sz;
+	M[3][3] = 1;
+	M[3][0] = (1 - sx)*p[0];
+	M[3][1] = (1 - sy)*p[1];
+	M[3][2] = (1 - sz)*p[2];
+	return M;
+}
+
 vector<vector<float>> Objeto::rotationMatrixX(float ax, vector<float> pivot) {
 	vector<vector<float>> M(4, vector<float>(4, 0));
 	float theta = ax * 3.141592653589793238462643383279502884 / 180;
@@ -150,6 +162,68 @@ vector<vector<float>> Objeto::rotationMatrixZ(float az, vector<float> pivot) {
 	return multiplyMatrix(translationFromOriginMatrix(pivot), multiplyMatrix(M, translationToOriginMatrix(pivot)));
 }
 
+vector<vector<float>> Objeto::shearMatrixX_XY(float shx) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[0][1] = shx;
+	return M;
+}
+
+vector<vector<float>> Objeto::shearMatrixY_XY(float shy) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[1][0] = shy;
+	return M;
+}
+
+vector<vector<float>> Objeto::shearMatrixX_XZ(float shx) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[0][2] = shx;
+	return M;
+}
+
+vector<vector<float>> Objeto::shearMatrixZ_XZ(float shz) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[2][0] = shz;
+	return M;
+}
+
+vector<vector<float>> Objeto::shearMatrixY_YZ(float shy) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[1][2] = shy;
+	return M;
+}
+
+vector<vector<float>> Objeto::shearMatrixZ_YZ(float shz) {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1; M[2][2] = 1; M[3][3] = 1;
+	M[2][1] = shz;
+	return M;
+}
+
+vector<vector<float>> Objeto::reflectionMatrixXZ() {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = -1;  M[2][2] = 1; M[3][3] = 1;
+	return M;
+}
+
+vector<vector<float>> Objeto::reflectionMatrixYZ() {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = -1; M[1][1] = 1;  M[2][2] = 1; M[3][3] = 1;
+	return M;
+}
+
+vector<vector<float>> Objeto::reflectionMatrixXY() {
+	vector<vector<float>> M(4, vector<float>(4, 0));
+	M[0][0] = 1; M[1][1] = 1;  M[2][2] = -1; M[3][3] = 1;
+	return M;
+}
+
+
+
 void Objeto::translate(float dx, float dy, float dz) {
 	setListOfPoints(multiplyByMatrix(getListOfPoints(), translationMatrix(dx, dy, dz)));
 }
@@ -172,6 +246,18 @@ void Objeto::rotateY(float ay, vector<float> pivot) {
 
 void Objeto::rotateZ(float az, vector<float> pivot) {
 	setListOfPoints(multiplyByMatrix(getListOfPoints(), rotationMatrixZ(az, pivot)));
+}
+
+void Objeto::reflectionXZ() {
+	setListOfPoints(multiplyByMatrix(getListOfPoints(), reflectionMatrixXZ()));
+}
+
+void Objeto::reflectionYZ() {
+	setListOfPoints(multiplyByMatrix(getListOfPoints(), reflectionMatrixYZ()));
+}
+
+void Objeto::reflectionXY() {
+	setListOfPoints(multiplyByMatrix(getListOfPoints(), reflectionMatrixXY()));
 }
 
 void Objeto::transform(vector<vector<float>> M) {

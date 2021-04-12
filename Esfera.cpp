@@ -73,15 +73,18 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Esfera::hasIntersection
 }
 
 vector<vector<float>> Esfera::getListOfPoints() {
-	return{ this->centro, somaVetores(this->centro, {0,0,this->R}) };
+	return{ this->centro };
 }
 
 void Esfera::setListOfPoints(vector<vector<float>> newPoints) {
 	this->centro = newPoints[0];
-	this->R = normaVetor(diferencaVetores(newPoints[1], this->centro));
 }
 
 void Esfera::scale(float s) {
 	this->R *= s;
 }
 
+void Esfera::scaleP(float s, vector<float> p) {
+	this->centro = multiplyVectorByMatrix(this->centro, scaleMatrixP(s, s, s, p));
+	this->R *= s;
+}

@@ -24,6 +24,9 @@ public:
 	void rotateX(float ax, vector<float> pivot = { 0, 0, 0 });
 	void rotateY(float ay, vector<float> pivot = { 0, 0, 0 });
 	void rotateZ(float az, vector<float> pivot = { 0, 0, 0 });
+	void reflectionXZ();
+	void reflectionYZ();
+	void reflectionXY();
 	void transform(vector<vector<float>> M);
 
 	static float produtoEscalar(vector<float> x, vector<float> y);
@@ -46,9 +49,20 @@ protected:
 	vector<vector<float>> translationToOriginMatrix(vector<float> point);
 	vector<vector<float>> translationFromOriginMatrix(vector<float> point);
 	vector<vector<float>> scaleMatrix(float sx, float sy, float sz);
+	vector<vector<float>> scaleMatrixP(float sx, float sy, float sz, vector<float> p);
 	vector<vector<float>> rotationMatrixX(float ax, vector<float> pivot);
 	vector<vector<float>> rotationMatrixY(float ay, vector<float> pivot);
 	vector<vector<float>> rotationMatrixZ(float az, vector<float> pivot);
+	vector<vector<float>> shearMatrixX_XY(float shx);
+	vector<vector<float>> shearMatrixY_XY(float shy);
+	vector<vector<float>> shearMatrixX_XZ(float shx);
+	vector<vector<float>> shearMatrixZ_XZ(float shz);
+	vector<vector<float>> shearMatrixY_YZ(float shy);
+	vector<vector<float>> shearMatrixZ_YZ(float shz);
+	vector<vector<float>> reflectionMatrixXZ();
+	vector<vector<float>> reflectionMatrixYZ();
+	vector<vector<float>> reflectionMatrixXY();
+	
 
 	virtual vector<vector<float>> getListOfPoints()=0;
 	virtual void setListOfPoints(vector<vector<float>> newPoints)=0;

@@ -135,4 +135,8 @@ void Cone::scale(float sBase, float sAltura) {
 	this->V = this->somaVetores(centro, multiplicaVetorPorEscalar(Hdir, H));
 }
 
+void Cone::scaleP(float sBase, float sAltura, vector<float> p) {
+
+}
+
 

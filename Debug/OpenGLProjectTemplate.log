@@ -1,49 +1,49 @@
 ﻿  Source.cpp
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(101): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(110): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(119): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(259): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(276): warning C4018: '<': signed/unsigned mismatch
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(291): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(293): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(303): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(304): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(305): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(322): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(323): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(328): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(329): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(334): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(335): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(336): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(355): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(356): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(415): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(416): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(422): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(423): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(424): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(428): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(429): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(430): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(434): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(435): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(436): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(440): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(441): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(442): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(446): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(447): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(448): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(452): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(453): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(454): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(455): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(456): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(457): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(476): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(477): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(478): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(558): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(105): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(114): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(123): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(263): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(280): warning C4018: '<': signed/unsigned mismatch
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(295): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(297): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(307): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(308): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(309): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(326): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(327): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(332): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(333): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(338): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(339): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(340): warning C4244: '=': conversion from 'double' to 'GLfloat', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(360): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(361): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(407): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(408): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(400): warning C4101: 'd0z': unreferenced local variable
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(400): warning C4101: 'tam': unreferenced local variable
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(400): warning C4101: 'd0y': unreferenced local variable
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(400): warning C4101: 'd0x': unreferenced local variable
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(471): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(472): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(490): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(491): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(492): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(500): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(501): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(502): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(503): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(504): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(517): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(532): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(533): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(534): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(535): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(536): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(537): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(557): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(558): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(559): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\bruno\onedrive\documentos\cg\cg_projeto\source.cpp(621): warning C4018: '<': signed/unsigned mismatch
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.exe
   OpenGLProjectTemplate.vcxproj -> C:\Users\bruno\OneDrive\Documentos\CG\CG_Projeto\Debug\CG - projeto.pdb (Full PDB)

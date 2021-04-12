@@ -13,9 +13,13 @@
 
 using namespace std;
 
-vector<float> p0_c = { -2.0, 1.5, 2.0 };
+vector<float> p0_c = { -2.0, 1.5, 4.0 };
+vector<float> at = { 0.0, 1.5, 0.0 };
+vector<float> up = { -2.0, 2.0, 4.0 };
+
+/*vector<float> p0_c = { 0.0, 1.5, 2.0 };
 vector<float> at = { 0.0, 1.5, -2.0 };
-vector<float> up = { -2.0, 2.0, 2.0 };
+vector<float> up = { 0.0, 2.0, 2.0 };*/
 
 int Width = 150;
 int Height = 150;
@@ -348,15 +352,64 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<flo
 
 	float d0x, d0y, d0z, tam, max = 0.0;
 
-	float fatorLuzDCeuGramaMar = Objeto::produtoEscalar(dLuzDistante, { 0.0,1.0,0.0 });
+	float fatorLuzDCeuGramaMar = Objeto::produtoEscalar(multiplyVectorByMatrix(dLuzDistante, M_CW), { 0.0,1.0,0.0 });
 
 	for (int i = 0; i < Height; i++) {
 		for (int j = 0; j < Width; j++) {
+
 			d0x = (left + (right - left)*(0.5 + j) / Width) - p0x;
 			d0y = (bottom + (top - bottom)*(0.5 + i) / Height) - p0y;
 			d0z = z - p0z;
 			tam = sqrt(d0x*d0x + d0y*d0y + d0z*d0z);
 			auto tup = corPixel(objetos, M_CW, dLuzDistante, fatorLuzDCeuGramaMar, pLuzPontual, p0x, p0y, p0z, d0x/tam, d0y/tam, d0z/tam);
+
+			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
+			janela[i][j][0] = R;
+			janela[i][j][1] = G;
+			janela[i][j][2] = B;
+			if (R > max) {
+				max = R;
+			}
+			if (G > max) {
+				max = G;
+			}
+			if (B > max) {
+				max = B;
+			}
+		}
+	}
+
+	for (int i = 0; i < Height; i++) {
+		for (int j = 0; j < Width; j++) {
+			janela[i][j][0] /= max;
+			janela[i][j][1] /= max;
+			janela[i][j][2] /= max;
+		}
+	}
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDrawPixels(Width, Height, GL_RGB, GL_FLOAT, janela);
+	glutSwapBuffers();
+
+}
+
+void lancarRaiosOrtho(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float>pLuzPontual, float left, float right, float bottom, float top, float p0x, float p0y, float p0z) {
+
+	float R, G, B;
+
+	float d0x, d0y, d0z, tam, max = 0.0;
+
+	float fatorLuzDCeuGramaMar = Objeto::produtoEscalar(multiplyVectorByMatrix(dLuzDistante, M_CW), { 0.0,1.0,0.0 });
+
+	for (int i = 0; i < Height; i++) {
+		for (int j = 0; j < Width; j++) {
+
+			float p0xR = (left + (right - left)*(0.5 + j) / Width);
+			float p0yR = (bottom + (top - bottom)*(0.5 + i) / Height);
+			float p0zR = 0;
+			vector<float> dR = Objeto::normalizaVetor({p0xR, p0yR, 0});
+			auto tup = corPixel(objetos, M_CW, dLuzDistante, fatorLuzDCeuGramaMar, pLuzPontual, p0x, p0y, p0z, dR[0], dR[1], dR[2]);
+			
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
 			janela[i][j][1] = G;
@@ -397,11 +450,14 @@ void display()
 	vector<vector<float>> treeBrown = { { 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f },{ 119.0f / 255.0f, 69.0f / 255.0f, 19.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> crimson = { { 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f },{ 220.0f / 255.0f, 20.0f / 255.0f, 60.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> brown = { { 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f },{ 210.0f / 255.0f, 105.0f / 255.0f, 30.0f / 255.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> lightBrown = { { 0.71f,0.396f,0.114f },{ 0.71f,0.396f,0.114f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> blueGlass = { { 140.0f / 255.0f,210.0f / 255.0f,255.0f / 255.0f },{ 70.0f / 255.0f,105.0f / 255.0f,128.0f / 255.0f }, { 70.0f / 128.0f,210.0f / 255.0f,128.0f / 255.0f } };
 	vector<vector<float>> darkBlue = { { 0.0f, 0.0f, 128.0f / 256.0f },{ 0.0f, 0.0f, 128.0f / 256.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> greenBrown = { { 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> red = { { 0.659f, 0.0f, 0.0f },{ 0.659f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> mountainBlue = { { 0.6314f, 0.2392f, 0.1765f },{ 0.6314f, 0.2392f, 0.1765f }, { 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> black = { { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> white = { { 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f, 1.0f } };
 
 	//faces para figuras basicas
 
@@ -417,7 +473,7 @@ void display()
 
 	//desenhando pinheiros
 	
-	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), boxFaces, treeBrown);
+	/*ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
@@ -427,25 +483,49 @@ void display()
 	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-2.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);*/
 
-	ObjetoComFaces a3Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-1.0, 0.0, -7.0)), boxFaces, treeBrown);
-	ObjetoComFaces a3Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a3Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a3Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a3Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-1.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(-3.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a1Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a1Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(-3.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
 
-	ObjetoComFaces a4Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(0.0, 0.0, -7.0)), boxFaces, treeBrown);
-	ObjetoComFaces a4Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a4Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a4Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a4Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
+	a1Tronco.rotateZ(10, a1Tronco.centro);
+	a1Folhas1.rotateZ(10, a1Tronco.centro);
+	a1Folhas2.rotateZ(10, a1Tronco.centro);
+	a1Folhas3.rotateZ(10, a1Tronco.centro);
+	a1Folhas4.rotateZ(10, a1Tronco.centro);
 
-	ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(1.0, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a2Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(0.7, 0.0, -7.0)), boxFaces, treeBrown);
+	ObjetoComFaces a2Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.7, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.7, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.7, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a2Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(0.7, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
+
+	ObjetoComFaces a3Tronco = ObjetoComFaces(a2Tronco);
+	ObjetoComFaces a3Folhas1 = ObjetoComFaces(a2Folhas1);
+	ObjetoComFaces a3Folhas2 = ObjetoComFaces(a2Folhas2);
+	ObjetoComFaces a3Folhas3 = ObjetoComFaces(a2Folhas3);
+	ObjetoComFaces a3Folhas4 = ObjetoComFaces(a2Folhas4);
+	a3Tronco.reflectionYZ();
+	a3Folhas1.reflectionYZ();
+	a3Folhas2.reflectionYZ();
+	a3Folhas3.reflectionYZ();
+	a3Folhas4.reflectionYZ();
+
+	Cilindro tronco1 = Cilindro({ 0.5, 0.0, -4.0 }, { 0.0, 1.0, 0.0 }, 1.0, 0.1, brown);
+	Cone cone1 = Cone({ 0.5f, 1.0f, -4.0f }, { 0.0f, 1.0f, 0.0f }, 1.2f, 0.3f, pineGreen);
+	Cilindro tronco2 = Cilindro(tronco1);
+	Cone cone2 = Cone(cone1);
+	tronco2.reflectionYZ();
+	cone2.reflectionYZ();
+
+	/*ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(1.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas3 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.4, -7.0)), triangularPyramidFaces, pineGreen);
-	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);
+	ObjetoComFaces a5Folhas4 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.6, -7.0)), triangularPyramidFaces, pineGreen);*/
 
 	//desenhando igreja
 
@@ -470,30 +550,19 @@ void display()
 	ObjetoComFaces janelaIgrejaEsquerdaMeio = ObjetoComFaces({ { 1.99f, 1.2f, -8.4f },{ 1.99f, 2.0f, -8.4f },{ 1.99f, 2.0f, -8.8f },{ 1.99f, 1.2f, -8.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
 	ObjetoComFaces janelaIgrejaEsquerdaTras = ObjetoComFaces({ { 1.99f, 1.2f, -9.4f },{ 1.99f, 2.0f, -9.4f },{ 1.99f, 2.0f, -9.8f },{ 1.99f, 1.2f, -9.8f } }, { { 0, 1, 2, 3 } }, blueGlass);
 	ObjetoComFaces janelaIgrejaFrente = ObjetoComFaces({ { 3.6f, 1.2f, -7.19f },{ 3.6f, 2.0f, -7.19f },{ 3.2f, 2.0f, -7.19f },{ 3.2f, 1.2f, -7.19f } }, { { 0, 1, 2, 3 } }, blueGlass);
+	ObjetoComFaces portaIgreja = ObjetoComFaces({ { 3.6f, 0.0f, -7.19f },{ 3.6f, 0.8f, -7.19f },{ 3.2f, 0.8f, -7.19f },{ 3.2f, 0.0f, -7.19f } }, { { 0, 1, 2, 3 } }, lightBrown);
 
 	//desenhando navio
 	ObjetoComFaces ship1 = ObjetoComFaces(multiplyByMatrix(8, ship, multiplyMatrix(translationMatrix(-2.5, 0.0, 2.0), scaleMatrix(1.5, 0.5, 0.5))), boxFaces, darkBlue);
 	ObjetoComFaces ship1pole1 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.3, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04))), boxFaces, greenBrown);
 	ObjetoComFaces ship1pole2 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.5, 0.5, 2.23), scaleMatrix(0.04, 0.8, 0.04))), boxFaces, greenBrown);
 	ObjetoComFaces ship1pole3 = ObjetoComFaces(multiplyByMatrix(8, basicCube, multiplyMatrix(translationMatrix(-1.7, 0.5, 2.24), scaleMatrix(0.02, 0.8, 0.02))), boxFaces, greenBrown);
-	ObjetoComFaces flag = ObjetoComFaces({ {-2.7f,0.6f,2.25f}, {-1.7f,0.6f,2.25f}, {-1.7f,1.3f,2.25f} }, { {0,1,2} }, red);
-
-	/* I - UM OBJETO DE UMA FACE
-	ObjetoComFaces objeto2d = ObjetoComFaces({ { 4.0f, 2.5f, -7.19f },{ 3.0f, 5.0f, -7.19f },{ 2.9f, 5.0f, -7.19f },{ 3.9f, 2.5f, -7.19f } }, { { 0, 1, 2, 3 } }, treeBrown);
-	vector<Objeto*> objetos = { &objeto2d };*/
-
-	/* II - UM SEMICIRCULO
-	float radius = 0.25;
-	float pi = 3.1415926535;
-	vector<vector<float>> pontosSemicirculo(15, vector<float>(3));
-	vector<vector<int>> facesSemicirculo(13, vector<int>(3));
-	for (int i = 0; i < 15; i++) {
-		pontosSemicirculo[i] = { cos(i*pi / 14.0f)*radius + 3.25f, sin(i*pi / 14.0f)*radius + 0.6f, -7.19f };
-	}
-	for (int i = 0; i < 13; i++) {
-		facesSemicirculo[i] = { 0, i + 1, i + 2 };
-	}
-	ObjetoComFaces semicirculo = {pontosSemicirculo, facesSemicirculo, treeBrown };*/
+    ObjetoComFaces flag = ObjetoComFaces({ {-2.7f,0.6f,2.25f}, {-1.7f,0.6f,2.25f}, {-1.7f,1.3f,2.25f} }, { {0,1,2}, {0,2,1} }, red);
+	ship1.rotateY(45, ship1.centro);
+	ship1pole1.rotateY(45, ship1.centro);
+	ship1pole2.rotateY(45, ship1.centro);
+	ship1pole3.rotateY(45, ship1.centro);
+	flag.rotateY(45, ship1.centro);
 
 	ObjetoComFaces montanha1 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(40.0, 0.0, -70.0), scaleMatrix(28.0, 9.0, 15.0))), triangularPyramidFaces, mountainBlue);
 	ObjetoComFaces montanha2 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(49.0, 0.0, -50.0), scaleMatrix(33.0, 10.0, 18.0))), triangularPyramidFaces, mountainBlue);
@@ -505,17 +574,11 @@ void display()
 
 	Esfera esfera1 = Esfera({ -1.0, 2.0, -7.0 }, 1.0, pineGreen);
 
-	vector<Objeto*> listaTodosObjetos = { &topoCilindroArvore, &topoConeArvore, &esfera1, &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4, &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4, &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente };
+	vector<Objeto*> listaTodosObjetos = { &portaIgreja, &topoCilindroArvore, &topoConeArvore, &esfera1, &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, /*&a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4, &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4,*/ &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente, &tronco1, &cone1, &tronco2, &cone2 };
 
 	//APLICAÇÃO DE MAIS TRANSFORMAÇÕES
-	
-	topoCilindroArvore.scale(2, 5);
-	//topoCilindroArvore.rotateZ(60, { 0,0,0 });
-	a3Tronco.rotateZ(10, a3Tronco.centro);
-	a3Folhas1.rotateZ(10, a3Tronco.centro);
-	a3Folhas2.rotateZ(10, a3Tronco.centro);
-	a3Folhas3.rotateZ(10, a3Tronco.centro);
-	a3Folhas4.rotateZ(10, a3Tronco.centro);
+
+	//TRANSFORMAÇÕES DE CÂMERA
 
 	vector<float> vUp = Objeto::normalizaVetor(Objeto::diferencaVetores(up, p0_c));
 
@@ -571,18 +634,18 @@ void display()
 
 	Cluster navio = Cluster({ &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag });
 	Cluster topoTorreCluster = Cluster({ &topoTorre, &cruzParteVertical, &cruzParteHorizontal });
-	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente });
+	Cluster igreja = Cluster({ &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente, &portaIgreja });
 	Cluster arvore1 = Cluster({ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4 });
-	Cluster arvore2= Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
+	Cluster arvore2 = Cluster({ &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4 });
 	Cluster arvore3 = Cluster({ &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4 });
-	Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
-	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });
+	/*Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
+	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });*/
 
-	vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja ,/*&arvore1, &arvore2,*/ &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
+	vector<Objeto*> objetos = { &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4, &arvore1, &arvore2, &arvore3, &tronco1, &cone1, &tronco2, &cone2 };
+	//vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja ,/*&arvore1, &arvore2,*/ &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
 
-	//lancarRaios(objetos, luz, -9.5, -8.5, 0, 1.5, -10, 0.5, 9, 7.5, 8.0);
+	//lancarRaiosOrtho(objetos, M_CW, direcaoLuzD, posicaoLuzP, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0);
 	lancarRaios(objetos, M_CW, direcaoLuzD, posicaoLuzP, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -0.5);
-	//lancarRaios()
 
 }
 
