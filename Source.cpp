@@ -260,7 +260,8 @@ void specialKeys(int key, int x, int y)
 
 //vector<vector<float>> intensidadeLuzDistante = { {0.0, 0.0, 0.0},{ 0.0, 0.0, 0.0 },{ 0.0, 0.0, 0.0 } };
 vector<vector<float>> intensidadeLuzDistante = { { 0.4f, 0.4f, 0.4f },{ 0.6f, 0.6f, 0.6f },{ 0.6f, 0.6f, 0.6f } };
-vector<vector<float>> intensidadeLuzPontual = { { 0.3f, 0.3f, 0.3f },{ 0.5f, 0.5f, 0.5f },{ 0.5f, 0.5f, 0.5f } }; float a = 1.0; float b = 0.005; float c = 0.001;
+vector<vector<float>> intensidadeLuzPontual = { { 0.3f, 0.3f, 0.3f },{ 0.5f, 0.5f, 0.5f },{ 0.5f, 0.5f, 0.5f } }; float a = 1.0; float b = 0.005; float c = 0.001; float raioFonteDeLuzPontual = 0.3;
+
 
 tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> direcaoLuzD, float fatorLuzDCeuGramaMar, vector<float> pLuzPontual, float p0x, float p0y, float p0z, float dx, float dy, float dz)
 {
@@ -301,12 +302,22 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 
 		vector<float> pInt = { p0x + dx*t, p0y + dy*t, p0z + dz*t };
 		vector<float> l0 = Objeto::diferencaVetores(pLuzPontual, pInt);
-		vector<float> l = Objeto::normalizaVetor(l0);
-		vector<float> r = Objeto::diferencaVetores(Objeto::multiplicaVetorPorEscalar(normal, 2*Objeto::produtoEscalar(l,normal)), l);
-		float d = pow(Objeto::normaVetor(l0),2);
-		float fatorD = 1.0 / (a + b*d + c*d*d);
-		float fatorAnguloP = fmax(Objeto::produtoEscalar(normal, l), 0);
-		float fatorAnguloRP = fmax(pow(Objeto::produtoEscalar(r, { -dx,-dy, -dz }), 1.0), 0);
+		float d = pow(Objeto::normaVetor(l0), 2);
+		float fatorD; float fatorAnguloP; float fatorAnguloRP;
+
+		if (d < (raioFonteDeLuzPontual+0.01)) {
+			fatorD = 1.0 / a;
+			fatorAnguloP = 1.0;
+			fatorAnguloRP = 1.0;
+		}
+		else {
+			vector<float> l = Objeto::normalizaVetor(l0);
+			vector<float> r = Objeto::diferencaVetores(Objeto::multiplicaVetorPorEscalar(normal, 2 * Objeto::produtoEscalar(l, normal)), l);
+			fatorD = 1.0 / (a + b*d + c*d*d);
+			fatorAnguloP = fmax(Objeto::produtoEscalar(normal, l), 0);
+			fatorAnguloRP = fmax(pow(Objeto::produtoEscalar(r, { -dx,-dy, -dz }), 1.0), 0);
+		}
+
 
 		R += material[0][0] * intensidadeLuzPontual[0][0] * fatorD + material[1][0] * intensidadeLuzPontual[1][0] * fatorD * fatorAnguloP + material[2][0] * intensidadeLuzPontual[2][0] * fatorD * fatorAnguloRP;
 		G += material[0][1] * intensidadeLuzPontual[0][1] * fatorD + material[1][1] * intensidadeLuzPontual[1][1] * fatorD * fatorAnguloP + material[2][1] * intensidadeLuzPontual[2][1] * fatorD * fatorAnguloRP;
@@ -456,8 +467,8 @@ void display()
 	vector<vector<float>> greenBrown = { { 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 74.0f / 256.0f, 67.0f / 256.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> red = { { 0.659f, 0.0f, 0.0f },{ 0.659f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
 	vector<vector<float>> mountainBlue = { { 0.6314f, 0.2392f, 0.1765f },{ 0.6314f, 0.2392f, 0.1765f }, { 0.0f, 0.0f, 0.0f } };
-	vector<vector<float>> black = { { 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f },{ 0.0f, 0.0f, 0.0f } };
-	vector<vector<float>> white = { { 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f, 1.0f },{ 1.0f, 1.0f, 1.0f } };
+	vector<vector<float>> black = { { 0.05f, 0.05f, 0.05f },{ 0.05f, 0.05f, 0.05f },{ 0.0f, 0.0f, 0.0f } };
+	vector<vector<float>> white = { { 1.0f, 1.0f, 1.0f },{ 0.9f, 0.9f, 0.9f },{ 0.1f, 0.1f, 0.1f } };
 
 	//faces para figuras basicas
 
@@ -521,6 +532,13 @@ void display()
 	tronco2.reflectionYZ();
 	cone2.reflectionYZ();
 
+	/*Cilindro tronco3 = Cilindro({ 0.5, 0.0, -9.0 }, { 0.0, 1.0, 0.0 }, 1.0, 0.1, brown);
+	Esfera topoEsfericoArvore1 = Esfera({0.5, 1.5, -9.0}, 0.5, pineGreen);
+	Cilindro tronco4 = Cilindro(tronco3);
+	Esfera topoEsfericoArvore2 = Esfera(topoEsfericoArvore1);
+	tronco4.reflectionYZ();
+	topoEsfericoArvore2.reflectionYZ();*/
+
 	/*ObjetoComFaces a5Tronco = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(1.0, 0.0, -7.0)), boxFaces, treeBrown);
 	ObjetoComFaces a5Folhas1 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.0, -7.0)), triangularPyramidFaces, pineGreen);
 	ObjetoComFaces a5Folhas2 = ObjetoComFaces(multiplyByMatrix(4, topoArvore, translationMatrix(1.0, 0.2, -7.0)), triangularPyramidFaces, pineGreen);
@@ -569,12 +587,10 @@ void display()
 	ObjetoComFaces montanha3 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(32.0, 0.0, -81.0), scaleMatrix(19.0, 11.0, 12.0))), triangularPyramidFaces, mountainBlue);
 	ObjetoComFaces montanha4 = ObjetoComFaces(multiplyByMatrix(4, basicTriangularPyramid, multiplyMatrix(translationMatrix(14.0, 0.0, -82.0), scaleMatrix(24.0, 10.0, 7.0))), triangularPyramidFaces, mountainBlue);
 
-	Cilindro topoCilindroArvore = Cilindro({ -4.0,0.0,-10.0 }, { 0.0, 1.0, 0.0 }, 2.0, 1.0, pineGreen);
-	Cone topoConeArvore = Cone({ 0.0,3.0,-6.0 }, { 0.0, 1.0, 0.0 }, 1.0, 0.5, pineGreen);
+	Cilindro poste1 = Cilindro({ 3.5f, 0.0f, -4.0f }, { 0.0f, 1.0f, 0.0f }, 1.5, 0.1, black);
+	Esfera topoPoste1 = Esfera({ 3.5f, 1.65f, -4.0f }, 0.3, white);
 
-	Esfera esfera1 = Esfera({ -1.0, 2.0, -7.0 }, 1.0, pineGreen);
-
-	vector<Objeto*> listaTodosObjetos = { &portaIgreja, &topoCilindroArvore, &topoConeArvore, &esfera1, &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, /*&a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4, &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4,*/ &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente, &tronco1, &cone1, &tronco2, &cone2 };
+	vector<Objeto*> listaTodosObjetos = { &portaIgreja, /*&tronco3, &topoEsfericoArvore1, &tronco4, &topoEsfericoArvore2,*/ &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, /*&a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4, &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4,*/ &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente, &tronco1, &cone1, &tronco2, &cone2, &poste1, &topoPoste1 };
 
 	//APLICAÇÃO DE MAIS TRANSFORMAÇÕES
 
@@ -623,7 +639,7 @@ void display()
 	}
 
 	vector<float> direcaoLuzD = { -1.0f / sqrt(2.0f), 1.0f / sqrt(2.0f), 0.0 };
-	vector<float> posicaoLuzP = { 0.0, 2.0, -2.0 };
+	vector<float> posicaoLuzP = { 3.5f, 1.65f, -4.0f };
 
 	vector<float> novaOrigem = multiplyVectorByMatrix({ 0.0, 0.0, 0.0 }, M_WC);
 
@@ -641,7 +657,7 @@ void display()
 	/*Cluster arvore4 = Cluster({ &a4Tronco, &a4Folhas1, &a4Folhas2, &a4Folhas3, &a4Folhas4 });
 	Cluster arvore5 = Cluster({ &a5Tronco, &a5Folhas1, &a5Folhas2, &a5Folhas3, &a5Folhas4 });*/
 
-	vector<Objeto*> objetos = { &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4, &arvore1, &arvore2, &arvore3, &tronco1, &cone1, &tronco2, &cone2 };
+	vector<Objeto*> objetos = { &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4, &arvore1, &arvore2, &arvore3, &tronco1, &cone1, &tronco2, &cone2, &poste1, &topoPoste1 };
 	//vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja ,/*&arvore1, &arvore2,*/ &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
 
 	//lancarRaiosOrtho(objetos, M_CW, direcaoLuzD, posicaoLuzP, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0);

@@ -22,6 +22,8 @@ vector<float> Cilindro::getNormal(vector<float> ponto) {
 }
 
 tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz) {
+	
+	vector<float> normal;
 
 	vector<float> w = this->diferencaVetores({ p0x,p0y,p0z }, this->centro);
 	vector<float> dr = { dx, dy, dz };
@@ -33,7 +35,6 @@ tuple<bool, float, vector<vector<float>>, vector<float>> Cilindro::hasIntersecti
 	float t0 = 10000;
 
 	float delta = B * B - 4 * A * C;
-	vector<float> normal;
 
 	if (delta < 0) {
 		t0 = 10000;

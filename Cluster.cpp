@@ -44,9 +44,9 @@ Cluster::Cluster(vector<ObjetoComFaces*> objetos)
 
 bool Cluster::podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz) {
 	vector<float> v = { p0x - this->centro[0], p0y - this->centro[1], p0z - this->centro[2] };
-	float A = v[0] * v[0] + v[1] * v[1] + v[2] * v[2] - this->raio * this->raio;
+	float C = v[0] * v[0] + v[1] * v[1] + v[2] * v[2] - this->raio * this->raio;
 	float B = 2 * v[0] * dx + 2 * v[1] * dy + 2 * v[2] * dz;
-	float C = dx*dx + dy*dy + dz*dz;
+	float A = dx*dx + dy*dy + dz*dz;
 	float delta = B*B - 4 * A*C;
 	if (delta > 0) {
 		return true;

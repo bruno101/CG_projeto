@@ -96,48 +96,6 @@ bool ObjetoComFaces::estaDentroDaFace(vector<float> pInt, int numFace) {
 	}
 	return true;
 
-	/*int pos = 0, neg = 0, i1;
-	vector<float> edge1, edge2, v;
-
-	for (int i = 0; i < size(faces[numFace]); i++) {
-		i1 = (i + 1 < size(faces[numFace])) ? i + 1 : 0;
-		edge1 = diferencaVetores(vertices[faces[numFace][i]], vertices[faces[numFace][i1]]);
-		edge2 = diferencaVetores(pInt, vertices[faces[numFace][i]]);
-		v = produtoVetorial(edge1, edge2);
-		if (v[0]+v[1]+v[2] >= 0.0) {
-			pos++;
-		}
-		else {
-			neg++;
-		}
-		if ((pos > 0) && (neg > 0)) {
-			return false;
-		}
-	}
-
-	return true;*/
-
-	/*float somaAreas = 0;
-
-	vector<float> v1(3), v2(3);
-
-	for (int i = 0; i < size(faces[numFace])-1; i++) {
-
-		v1 = diferencaVetores(this->vertices[faces[numFace][i]], pInt);
-		v2 = diferencaVetores(this->vertices[faces[numFace][i+1]], pInt);
-		somaAreas += this->normaVetor(this->produtoVetorial(v1,v2));
-
-	}
-
-	v1 = diferencaVetores(this->vertices[faces[numFace][size(faces[numFace])-1]], pInt);
-	v2 = diferencaVetores(this->vertices[faces[numFace][0]], pInt);
-	somaAreas += this->normaVetor(this->produtoVetorial(v1, v2));
-
-	if ((somaAreas - this->areasFaces[numFace]) < 0.001) {
-		return true;
-	}
-	return false;*/
-
 }
 
 
@@ -191,9 +149,9 @@ tuple<bool, float> ObjetoComFaces::hasIntersectionFace(float p0x, float p0y, flo
 
 bool ObjetoComFaces::podeTerIntersecao(float p0x, float p0y, float p0z, float dx, float dy, float dz) {
 	vector<float> v = { p0x-this->centro[0], p0y-this->centro[1], p0z-this->centro[2] };
-	float A = v[0]*v[0] + v[1]*v[1] + v[2]*v[2] - this->raio * this->raio;
+	float C = v[0]*v[0] + v[1]*v[1] + v[2]*v[2] - this->raio * this->raio;
 	float B = 2*v[0]*dx + 2*v[1]*dy + 2*v[2]*dz;
-	float C = dx*dx + dy*dy + dz*dz;
+	float A = dx*dx + dy*dy + dz*dz;
 	float delta = B*B - 4*A*C;
 	if (delta > 0) {
 		return true;
