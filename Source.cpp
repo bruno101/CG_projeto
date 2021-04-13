@@ -291,7 +291,7 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 
 		vector<float> pInt = { p0x + dx*t, p0y + dy*t, p0z + dz*t };
 		vector<float> l0 = Objeto::diferencaVetores(pLuzPontual, pInt);
-		float d = pow(Objeto::normaVetor(l0), 2);
+		float d = Objeto::normaVetor(l0);
 		float fatorD; float fatorAnguloP; float fatorAnguloRP;
 
 		if (d < (raioFonteDeLuzPontual+0.01)) {
@@ -436,7 +436,7 @@ tuple<GLfloat, GLfloat, GLfloat> corPixelOrtho(vector<Objeto*> objetos, vector<v
 
 		vector<float> pInt = { p0x + dx*t, p0y + dy*t, p0z + dz*t };
 		vector<float> l0 = Objeto::diferencaVetores(pLuzPontual, pInt);
-		float d = pow(Objeto::normaVetor(l0), 2);
+		float d = Objeto::normaVetor(l0);
 		float fatorD; float fatorAnguloP; float fatorAnguloRP;
 
 		if (d < (raioFonteDeLuzPontual + 0.01)) {
