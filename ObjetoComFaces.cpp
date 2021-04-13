@@ -235,27 +235,3 @@ void ObjetoComFaces::scaleP(float sx, float sy, float sz, vector<float> p) {
 	}
 	this->normaisFaces = normaisFaces;
 }
-
-void ObjetoComFaces::shearX_XY(float shx) {
-
-}
-
-void ObjetoComFaces::shearY_XY(float shy) {
-
-}
-
-void ObjetoComFaces::shearX_XZ(float shx) {
-
-}
-
-void ObjetoComFaces::shearZ_XZ(float shz) {
-
-}
-
-void ObjetoComFaces::shearY_YZ(float shy) {
-
-}
-
-void ObjetoComFaces::shearZ_YZ(float shz) {
-
-}
