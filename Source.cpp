@@ -383,12 +383,16 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<flo
 		}
 	}
 
-	for (int i = 0; i < Height; i++) {
-		for (int j = 0; j < Width; j++) {
-			janela[i][j][0] /= max;
-			janela[i][j][1] /= max;
-			janela[i][j][2] /= max;
+	if (max > 1.0) {
+
+		for (int i = 0; i < Height; i++) {
+			for (int j = 0; j < Width; j++) {
+				janela[i][j][0] /= max;
+				janela[i][j][1] /= max;
+				janela[i][j][2] /= max;
+			}
 		}
+
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
