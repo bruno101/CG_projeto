@@ -129,9 +129,9 @@ vector<vector<float>> Objeto::scaleMatrixP(float sx, float sy, float sz, vector<
 	M[1][1] = sy;
 	M[2][2] = sz;
 	M[3][3] = 1;
-	M[3][0] = (1 - sx)*p[0];
-	M[3][1] = (1 - sy)*p[1];
-	M[3][2] = (1 - sz)*p[2];
+	M[0][3] = (1 - sx)*p[0];
+	M[1][3] = (1 - sy)*p[1];
+	M[2][3] = (1 - sz)*p[2];
 	return M;
 }
 

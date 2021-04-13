@@ -17,10 +17,6 @@ vector<float> p0_c = { -2.0, 1.5, 4.0 };
 vector<float> at = { 0.0, 1.5, 0.0 };
 vector<float> up = { -2.0, 2.0, 4.0 };
 
-/*vector<float> p0_c = { 0.0, 1.5, 2.0 };
-vector<float> at = { 0.0, 1.5, -2.0 };
-vector<float> up = { 0.0, 2.0, 2.0 };*/
-
 int Width = 150;
 int Height = 150;
 GLfloat janela[150][150][3];
@@ -401,6 +397,99 @@ void lancarRaios(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<flo
 
 }
 
+tuple<GLfloat, GLfloat, GLfloat> corPixelOrtho(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> direcaoLuzD, float fatorLuzDCeuGramaMar, vector<float> pLuzPontual, float p0x, float p0y, float p0z, float dx, float dy, float dz)
+{
+
+	GLfloat R;
+	GLfloat G;
+	GLfloat B;
+
+	bool intersecta = false;
+	float t = 100000;
+
+	bool x;
+	float y;
+	vector<vector<float>> z, material;
+	vector<float> w, normal;
+
+	for (int i = 0; i < size(objetos); i++) {
+		tie(x, y, z, w) = (*objetos[i]).hasIntersection(p0x, p0y, p0z, dx, dy, dz);
+		if (x == true) {
+			if (y < t) {
+				intersecta = true;
+				t = y;
+				material = z;
+				normal = w;
+			}
+		}
+	}
+
+	if (intersecta == true) {
+
+		//OBJETO
+		float fatorAnguloD = fmax(normal[0] * direcaoLuzD[0] + normal[1] * direcaoLuzD[1] + normal[2] * direcaoLuzD[2], 0);
+		vector<float> direcaoLuzRD = Objeto::diferencaVetores(Objeto::multiplicaVetorPorEscalar(normal, 2 * Objeto::produtoEscalar(direcaoLuzD, normal)), direcaoLuzD);
+		float fatorAnguloRD = fmax(pow(direcaoLuzRD[0] * (-dx) - direcaoLuzRD[1] * (-dy) - direcaoLuzRD[2] * (-dz), 1.0), 0);
+		R = material[0][0] * intensidadeLuzDistante[0][0] + material[1][0] * intensidadeLuzDistante[1][0] * fatorAnguloD + material[2][0] * intensidadeLuzDistante[2][0] * fatorAnguloRD;
+		G = material[0][1] * intensidadeLuzDistante[0][1] + material[1][1] * intensidadeLuzDistante[1][1] * fatorAnguloD + material[2][1] * intensidadeLuzDistante[2][1] * fatorAnguloRD;
+		B = material[0][2] * intensidadeLuzDistante[0][2] + material[1][2] * intensidadeLuzDistante[1][2] * fatorAnguloD + material[2][2] * intensidadeLuzDistante[2][2] * fatorAnguloRD;
+
+		vector<float> pInt = { p0x + dx*t, p0y + dy*t, p0z + dz*t };
+		vector<float> l0 = Objeto::diferencaVetores(pLuzPontual, pInt);
+		float d = pow(Objeto::normaVetor(l0), 2);
+		float fatorD; float fatorAnguloP; float fatorAnguloRP;
+
+		if (d < (raioFonteDeLuzPontual + 0.01)) {
+			fatorD = 1.0 / a;
+			fatorAnguloP = 1.0;
+			fatorAnguloRP = 1.0;
+		}
+		else {
+			vector<float> l = Objeto::normalizaVetor(l0);
+			vector<float> r = Objeto::diferencaVetores(Objeto::multiplicaVetorPorEscalar(normal, 2 * Objeto::produtoEscalar(l, normal)), l);
+			fatorD = 1.0 / (a + b*d + c*d*d);
+			fatorAnguloP = fmax(Objeto::produtoEscalar(normal, l), 0);
+			fatorAnguloRP = fmax(pow(Objeto::produtoEscalar(r, { -dx,-dy, -dz }), 1.0), 0);
+		}
+
+
+		R += material[0][0] * intensidadeLuzPontual[0][0] * fatorD + material[1][0] * intensidadeLuzPontual[1][0] * fatorD * fatorAnguloP + material[2][0] * intensidadeLuzPontual[2][0] * fatorD * fatorAnguloRP;
+		G += material[0][1] * intensidadeLuzPontual[0][1] * fatorD + material[1][1] * intensidadeLuzPontual[1][1] * fatorD * fatorAnguloP + material[2][1] * intensidadeLuzPontual[2][1] * fatorD * fatorAnguloRP;
+		B += material[0][2] * intensidadeLuzPontual[0][2] * fatorD + material[1][2] * intensidadeLuzPontual[1][2] * fatorD * fatorAnguloP + material[2][2] * intensidadeLuzPontual[2][2] * fatorD * fatorAnguloRP;
+
+	}
+	else {
+		vector<float> p0_W = multiplyVectorByMatrix({ p0x, p0y, p0z }, M_CW);
+		vector<float> d_W = multiplyVectorByMatrix({ p0x + dx, p0y + dy, p0z + dz }, M_CW);
+		p0x = p0_W[0]; p0y = p0_W[1]; p0z = p0_W[2];
+		dx = d_W[0] - p0x; dy = d_W[1] - p0y; dz = d_W[2] - p0z;
+
+		if (p0y <= 0) {
+			if (p0z > 0) {
+				//MAR
+				R = 0.0;
+				G = 0.412*intensidadeLuzDistante[0][1] + 0.412*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+				B = 0.58*intensidadeLuzDistante[0][2] + 0.58*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+			}
+			else {
+				//GRAMA
+				R = 0.0;
+				G = 0.602*intensidadeLuzDistante[0][1] + 0.602*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+				B = 0.09*intensidadeLuzDistante[0][2] + 0.09*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+			}
+		}
+		else {
+			//CEU
+			R = 0.529*intensidadeLuzDistante[0][0] + 0.529*intensidadeLuzDistante[1][0] * fatorLuzDCeuGramaMar;
+			G = 0.808*intensidadeLuzDistante[0][1] + 0.808*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+			B = 0.922*intensidadeLuzDistante[0][2] + 0.922*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+		}
+	}
+
+	return make_tuple(R, G, B);
+
+}
+
 void lancarRaiosOrtho(vector<Objeto*> objetos, vector<vector<float>> M_CW, vector<float> dLuzDistante, vector<float>pLuzPontual, float left, float right, float bottom, float top, float p0x, float p0y, float p0z) {
 
 	float R, G, B;
@@ -415,8 +504,8 @@ void lancarRaiosOrtho(vector<Objeto*> objetos, vector<vector<float>> M_CW, vecto
 			float p0xR = (left + (right - left)*(0.5 + j) / Width);
 			float p0yR = (bottom + (top - bottom)*(0.5 + i) / Height);
 			float p0zR = 0;
-			vector<float> dR = Objeto::normalizaVetor({p0xR, p0yR, 0});
-			auto tup = corPixel(objetos, M_CW, dLuzDistante, fatorLuzDCeuGramaMar, pLuzPontual, p0x, p0y, p0z, dR[0], dR[1], dR[2]);
+			vector<float> dR = { 0.0,0.0,-1.0 };
+			auto tup = corPixelOrtho(objetos, M_CW, dLuzDistante, fatorLuzDCeuGramaMar, pLuzPontual, p0xR, p0yR, p0zR, dR[0], dR[1], dR[2]);
 			
 			R = get<0>(tup), G = get<1>(tup), B = get<2>(tup);
 			janela[i][j][0] = R;
@@ -434,12 +523,16 @@ void lancarRaiosOrtho(vector<Objeto*> objetos, vector<vector<float>> M_CW, vecto
 		}
 	}
 
-	for (int i = 0; i < Height; i++) {
-		for (int j = 0; j < Width; j++) {
-			janela[i][j][0] /= max;
-			janela[i][j][1] /= max;
-			janela[i][j][2] /= max;
+	if (max > 1.0) {
+
+		for (int i = 0; i < Height; i++) {
+			for (int j = 0; j < Width; j++) {
+				janela[i][j][0] /= max;
+				janela[i][j][1] /= max;
+				janela[i][j][2] /= max;
+			}
 		}
+
 	}
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -518,7 +611,7 @@ void display()
 	cone2.reflectionYZ();
 
 	ObjetoComFaces tronco3 = ObjetoComFaces(multiplyByMatrix(8, troncoArvore, translationMatrix(7.0, 0.0, -2.0)), boxFaces, treeBrown);
-	Esfera topoEsfericoArvore = Esfera({7.0f, 1.4f, -2.0f}, 0.8, pineGreen);
+	Esfera topoEsfericoArvore = Esfera({7.05f, 1.45f, -1.95f}, 0.8, pineGreen);
 
 	//desenhando igreja
 
@@ -643,7 +736,7 @@ void display()
 	vector<Objeto*> objetos = { &igreja, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4, &arvore1, &arvore2, &arvore3, &tronco1, &cone1, &tronco2, &cone2, &tronco3, &topoEsfericoArvore, &poste1, &topoPoste1 };
 	//vector<Objeto*> objetos = { /*&baseIgreja, &navio, &arvore3*/ /*&topoCilindroArvore,*/&topoCilindroArvore, &topoConeArvore, &esfera1, &igreja ,/*&arvore1, &arvore2,*/ &arvore3, &montanha1/*&arvore4, &arvore5, &topoTorreCluster, &navio, &montanha1, &montanha2, &montanha3, &montanha4*/ };
 
-	//lancarRaiosOrtho(objetos, M_CW, direcaoLuzD, posicaoLuzP, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0);
+	//lancarRaiosOrtho(objetos, M_CW, direcaoLuzD, posicaoLuzP, -10.0, 10.0, -10.0, 10.0, 0.0, 0.0, 0.0);
 	lancarRaios(objetos, M_CW, direcaoLuzD, posicaoLuzP, -0.5, 0.5, -0.5, 0.5, 0.0, 0.0, 0.0, -0.5);
 
 }
