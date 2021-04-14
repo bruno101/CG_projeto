@@ -16,7 +16,6 @@ public:
 	float raio;
 	string tipoObjeto;
 	virtual tuple<bool, float, vector<vector<float>>, vector<float>> hasIntersection(float p0x, float p0y, float p0z, float dx, float dy, float dz) = 0;
-	/*virtual void paint() = 0;*/
 
 	void translate(float dx, float dy, float dz);
 	void translateToOrigin(vector<float> point);
@@ -66,15 +65,6 @@ protected:
 
 	virtual vector<vector<float>> getListOfPoints()=0;
 	virtual void setListOfPoints(vector<vector<float>> newPoints)=0;
-
-	/*virtual void translate(float dx, float dy, float dz) = 0;
-	virtual void translateToOrigin(vector<float> point) = 0;
-	virtual void translateFromOrigin(vector<float> point) = 0;
-	virtual void scale(float sx, float sy, float sz) = 0;
-	virtual void rotateX(float ax, vector<float> pivot = { 0, 0, 0 }) = 0;
-	virtual void rotateY(float ax, vector<float> pivot = { 0, 0, 0 }) = 0;
-	virtual void rotateZ(float ax, vector<float> pivot = { 0, 0, 0 }) = 0;*/
-
 
 };
 

@@ -123,31 +123,6 @@ vector<vector<float>> rotationMatrixZ(float az, vector<float> pivot = { 0, 0, 0 
 	return multiplyMatrix(translationFromOriginMatrix(pivot), multiplyMatrix(M, translationToOriginMatrix(pivot)));
 }
 
-//FUNÇÕES PARA PINTAR POLÍGONOS
-
-
-void triangle(vector<vector<float>> poly, int a, int b, int c, float color[3]) {
-	glBegin(GL_TRIANGLES);
-	glColor3fv(color);
-	glVertex3fv(poly[a].data());
-	glVertex3fv(poly[b].data());
-	glVertex3fv(poly[c].data());
-	glEnd();
-}
-
-void quad(vector<vector<float>> poly, int a, int b, int c, int d, GLfloat color[3])
-{
-	glBegin(GL_QUADS);
-	glColor3fv(color);
-	glVertex3fv(poly[a].data());
-	glVertex3fv(poly[b].data());
-	glVertex3fv(poly[c].data());
-	glVertex3fv(poly[d].data());
-	glEnd();
-
-}
-
-
 //FORMAS BÁSICAS
 
 
@@ -158,13 +133,6 @@ vector<vector<float>> basicTriangularPyramid{
 	{ 0.5f,1.0f,0.33f }
 };
 
-void colorTriangularPyramid(vector<vector<float>> triangularPyramid, GLfloat color[3]) {
-	triangle(triangularPyramid, 1, 2, 3, color);
-	triangle(triangularPyramid, 2, 0, 3, color);
-	triangle(triangularPyramid, 0, 1, 3, color);
-	triangle(triangularPyramid, 0, 2, 1, color);
-}
-
 vector<vector<float>> basicSquarePyramid{
 	{ 0.0f,0.0f,0.0f },
 	{ 0.0f,0.0f,1.0f },
@@ -173,13 +141,6 @@ vector<vector<float>> basicSquarePyramid{
 	{ 0.5f,1.0f,0.5f },
 };
 
-void colorSquarePyramid(vector<vector<float>> squarePyramid, GLfloat color[3]) {
-	quad(squarePyramid, 0, 1, 2, 3, color);
-	triangle(squarePyramid, 1, 2, 4, color);
-	triangle(squarePyramid, 2, 3, 4, color);
-	triangle(squarePyramid, 3, 0, 4, color);
-	triangle(squarePyramid, 0, 1, 4, color);
-}
 
 vector<vector<float>> roof{
 	{ 0.0f, 0.0f, 0.0f },
@@ -189,15 +150,6 @@ vector<vector<float>> roof{
 	{ 0.5f, 1.0f, 0.0f },
 	{ 0.5f, 1.0f, 1.0f },
 };
-
-void colorRoof(vector<vector<float>> roof, GLfloat colorHouse[3], GLfloat colorRoof[3]) {
-	quad(roof, 0, 1, 2, 3, colorHouse);
-	triangle(roof, 5, 1, 2, colorHouse);
-	triangle(roof, 0, 4, 3, colorHouse);
-	quad(roof, 5, 2, 3, 4, colorRoof);
-	quad(roof, 0, 1, 5, 4, colorRoof);
-
-}
 
 vector<vector<float>> basicCube{
 	{ 0.0f,0.0f,0.0f },
@@ -209,15 +161,6 @@ vector<vector<float>> basicCube{
 	{ 1.0f,1.0f,1.0f },
 	{ 1.0f,1.0f,0.0f },
 };
-
-void colorBox(vector<vector<float>> box, GLfloat color[3]) {
-	quad(box, 4, 0, 1, 5, color);
-	quad(box, 5, 1, 2, 6, color);
-	quad(box, 6, 2, 3, 7, color);
-	quad(box, 7, 3, 0, 4, color);
-	quad(box, 5, 6, 7, 4, color);
-	quad(box, 1, 0, 3, 2, color);
-}
 
 vector<vector<float>> ship{
 	{ 0.0f,0.0f,0.0f },
@@ -232,23 +175,9 @@ vector<vector<float>> ship{
 
 // FUNÇÕES PRINCIPAIS
 
-double rotate_y = 0;
-double rotate_x = 0;
-void specialKeys(int key, int x, int y)
-{
-	if (key == GLUT_KEY_RIGHT)
-		rotate_y += 5;
-	else if (key == GLUT_KEY_LEFT)
-		rotate_y -= 5;
-	else if (key == GLUT_KEY_UP)
-		rotate_x += 5;
-	else if (key == GLUT_KEY_DOWN)
-		rotate_x -= 5;
-	glutPostRedisplay();
-}
-
-//vector<vector<float>> intensidadeLuzDistante = { {0.0, 0.0, 0.0},{ 0.0, 0.0, 0.0 },{ 0.0, 0.0, 0.0 } };
-vector<vector<float>> intensidadeLuzDistante = { { 0.2f, 0.2f, 0.2f },{ 0.4f, 0.4f, 0.4f },{ 0.4f, 0.4f, 0.4f } };
+//Para a luz ambiente só importa o componente ambiente
+vector<vector<float>> intensidadeLuzAmbiente = { {0.1f, 0.1f, 0.1f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f} };
+vector<vector<float>> intensidadeLuzDistante = { { 0.1f, 0.1f, 0.1f },{ 0.4f, 0.4f, 0.4f },{ 0.4f, 0.4f, 0.4f } };
 vector<vector<float>> intensidadeLuzPontual = { { 0.3f, 0.3f, 0.3f },{ 0.6f, 0.6f, 0.6f },{ 0.6f, 0.6f, 0.6f } }; float a = 1.0; float b = 0.005; float c = 0.001; float raioFonteDeLuzPontual = 0.3;
 
 
@@ -312,6 +241,10 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 		G += material[0][1] * intensidadeLuzPontual[0][1] * fatorD + material[1][1] * intensidadeLuzPontual[1][1] * fatorD * fatorAnguloP + material[2][1] * intensidadeLuzPontual[2][1] * fatorD * fatorAnguloRP;
 		B += material[0][2] * intensidadeLuzPontual[0][2] * fatorD + material[1][2] * intensidadeLuzPontual[1][2] * fatorD * fatorAnguloP + material[2][2] * intensidadeLuzPontual[2][2] * fatorD * fatorAnguloRP;
 		
+		R += material[0][0] * intensidadeLuzAmbiente[0][0];
+		G += material[0][1] * intensidadeLuzAmbiente[0][1];
+		B += material[0][2] * intensidadeLuzAmbiente[0][2];
+
 	}
 	else {
 		vector<float> p0_W = multiplyVectorByMatrix({ p0x, p0y, p0z }, M_CW);
@@ -323,21 +256,21 @@ tuple<GLfloat, GLfloat, GLfloat> corPixel(vector<Objeto*> objetos, vector<vector
 			if (zIntChao > 0) {
 				//MAR
 				R = 0.0;
-				G = 0.412*intensidadeLuzDistante[0][1] + 0.412*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
-				B = 0.58*intensidadeLuzDistante[0][2] + 0.58*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
+				G = 0.412*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.412*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+				B = 0.58*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.58*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 			}
 			else {
 				//GRAMA
 				R = 0.0;
-				G = 0.602*intensidadeLuzDistante[0][1] + 0.602*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
-				B = 0.09*intensidadeLuzDistante[0][2] + 0.09*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
+				G = 0.602*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.602*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+				B = 0.09*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.09*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 			}
 		}
 		else {
 			//CEU
-			R = 0.529*intensidadeLuzDistante[0][0] + 0.529*intensidadeLuzDistante[1][0]*fatorLuzDCeuGramaMar;
-			G = 0.808*intensidadeLuzDistante[0][1] + 0.808*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
-			B = 0.922*intensidadeLuzDistante[0][2] + 0.922*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
+			R = 0.529*(intensidadeLuzDistante[0][0] + intensidadeLuzAmbiente[0][0]) + 0.529*intensidadeLuzDistante[1][0]*fatorLuzDCeuGramaMar;
+			G = 0.808*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.808*intensidadeLuzDistante[1][1]*fatorLuzDCeuGramaMar;
+			B = 0.922*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.922*intensidadeLuzDistante[1][2]*fatorLuzDCeuGramaMar;
 		}
 	}
 
@@ -457,6 +390,10 @@ tuple<GLfloat, GLfloat, GLfloat> corPixelOrtho(vector<Objeto*> objetos, vector<v
 		G += material[0][1] * intensidadeLuzPontual[0][1] * fatorD + material[1][1] * intensidadeLuzPontual[1][1] * fatorD * fatorAnguloP + material[2][1] * intensidadeLuzPontual[2][1] * fatorD * fatorAnguloRP;
 		B += material[0][2] * intensidadeLuzPontual[0][2] * fatorD + material[1][2] * intensidadeLuzPontual[1][2] * fatorD * fatorAnguloP + material[2][2] * intensidadeLuzPontual[2][2] * fatorD * fatorAnguloRP;
 
+		R += material[0][0] * intensidadeLuzAmbiente[0][0];
+		G += material[0][1] * intensidadeLuzAmbiente[0][1];
+		B += material[0][2] * intensidadeLuzAmbiente[0][2];
+
 	}
 	else {
 		vector<float> p0_W = multiplyVectorByMatrix({ p0x, p0y, p0z }, M_CW);
@@ -468,21 +405,21 @@ tuple<GLfloat, GLfloat, GLfloat> corPixelOrtho(vector<Objeto*> objetos, vector<v
 			if (p0z > 0) {
 				//MAR
 				R = 0.0;
-				G = 0.412*intensidadeLuzDistante[0][1] + 0.412*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
-				B = 0.58*intensidadeLuzDistante[0][2] + 0.58*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+				G = 0.412*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.412*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+				B = 0.58*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.58*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
 			}
 			else {
 				//GRAMA
 				R = 0.0;
-				G = 0.602*intensidadeLuzDistante[0][1] + 0.602*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
-				B = 0.09*intensidadeLuzDistante[0][2] + 0.09*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+				G = 0.602*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.602*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+				B = 0.09*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.09*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
 			}
 		}
 		else {
 			//CEU
-			R = 0.529*intensidadeLuzDistante[0][0] + 0.529*intensidadeLuzDistante[1][0] * fatorLuzDCeuGramaMar;
-			G = 0.808*intensidadeLuzDistante[0][1] + 0.808*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
-			B = 0.922*intensidadeLuzDistante[0][2] + 0.922*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
+			R = 0.529*(intensidadeLuzDistante[0][0] + intensidadeLuzAmbiente[0][0]) + 0.529*intensidadeLuzDistante[1][0] * fatorLuzDCeuGramaMar;
+			G = 0.808*(intensidadeLuzDistante[0][1] + intensidadeLuzAmbiente[0][1]) + 0.808*intensidadeLuzDistante[1][1] * fatorLuzDCeuGramaMar;
+			B = 0.922*(intensidadeLuzDistante[0][2] + intensidadeLuzAmbiente[0][2]) + 0.922*intensidadeLuzDistante[1][2] * fatorLuzDCeuGramaMar;
 		}
 	}
 
@@ -666,8 +603,6 @@ void display()
 	Cilindro poste1 = Cilindro({ 3.5f, 0.0f, -4.0f }, { 0.0f, 1.0f, 0.0f }, 1.5, 0.1, black);
 	Esfera topoPoste1 = Esfera({ 3.5f, 1.65f, -4.0f }, 0.3, white);
 
-
-
 	vector<Objeto*> listaTodosObjetos = { &portaIgreja, &tronco3, &topoEsfericoArvore, &a1Tronco, &a1Folhas1, &a1Folhas2, &a1Folhas3, &a1Folhas4, &a2Tronco, &a2Folhas1, &a2Folhas2, &a2Folhas3, &a2Folhas4, &a3Tronco, &a3Folhas1, &a3Folhas2, &a3Folhas3, &a3Folhas4, &montanha1, &montanha2, &montanha3, &montanha4, &ship1, &ship1pole1, &ship1pole2, &ship1pole3, &flag, &topoTorre, &cruzParteVertical, &cruzParteHorizontal, &baseTorre, &baseIgreja, &topoIgreja, &telhado, &janelaTorreFrenteAlto, &janelaTorreEsquerdaAlto, &janelaTorreFrenteBaixo, &janelaTorreEsquerdaBaixo, &janelaIgrejaEsquerdaFrente, &janelaIgrejaEsquerdaMeio, &janelaIgrejaEsquerdaTras, &janelaIgrejaFrente, &tronco1, &cone1, &tronco2, &cone2, &poste1, &topoPoste1 };
 
 	//APLICAÇÃO DE MAIS TRANSFORMAÇÕES
@@ -750,7 +685,6 @@ int main(int argc, char **argv)
 	glutCreateWindow("Projeto CG");
 
 	glutDisplayFunc(display);
-	//glutSpecialFunc(specialKeys);
 	glEnable(GL_DEPTH_TEST);
 
 	glutMainLoop();
